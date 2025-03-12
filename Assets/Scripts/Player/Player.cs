@@ -29,7 +29,7 @@ public class Player : NetworkBehaviour
 	{
 		if (!IsOwner) return;
 
-		_body.linearVelocity = _movement * GameData.Instance.playerMoveSpeed;
+		_body.linearVelocity = ((transform.forward * _movement.y + transform.right * _movement.x) * GameData.Instance.playerMoveSpeed) + Vector3.up * _body.linearVelocity.y;
 	}
 
 	void OnJump() {
@@ -38,7 +38,13 @@ public class Player : NetworkBehaviour
 	}
 	void OnMove(Vector2 value)
 	{
-		_movement = value;
+		if (!IsOwner) return;
+        _movement = value;
 	}
-	void OnLook(Vector2 value) { _camera.transform.rotation = Quaternion.Euler(value); }
+	void OnLook(Vector2 value) {
+		if (!IsOwner) return;
+		_camera.transform.rotation = 
+			Quaternion.Euler(new Vector3(value.x, 0) + _camera.transform.eulerAngles);
+		transform.rotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, value.y));
+	}
 }

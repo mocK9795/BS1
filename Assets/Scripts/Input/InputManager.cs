@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using GameFunctions;
 
 public class InputManager : MonoBehaviour
 {
@@ -32,6 +33,6 @@ public class InputManager : MonoBehaviour
 
 	public void OnLook(InputAction.CallbackContext value)
 	{
-		onLook?.Invoke(value.ReadValue<Vector2>() * -1);
+		onLook?.Invoke(Basic.LookValue(value.ReadValue<Vector2>()));
 	}
 }
