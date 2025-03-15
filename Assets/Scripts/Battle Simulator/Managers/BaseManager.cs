@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public abstract class BaseManager : MonoBehaviour
+public abstract class BaseManager : NetworkBehaviour
 {
     [Range(0.1f, 20f)]
     [SerializeField] float tickRate;
@@ -14,6 +15,7 @@ public abstract class BaseManager : MonoBehaviour
 
 	public void Update()
 	{
+		if (!IsServer) return;
 		_tickTimer += Time.deltaTime;
 		if (_tickTimer > _tickSpeed) { 
 			_tickTimer = 0;

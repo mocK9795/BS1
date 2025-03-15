@@ -6,6 +6,7 @@ public class Player : NetworkBehaviour
 {
 	Rigidbody _body;
 	Camera _camera;
+	Animator _animator;
 
 	Vector2 _movement;
 
@@ -13,12 +14,13 @@ public class Player : NetworkBehaviour
 	{
 		base.OnNetworkSpawn();
 
-		InputManager.Instance.onJump += OnJump;	
-		InputManager.Instance.onMove += OnMove;
-		InputManager.Instance.onLook += OnLook;
+		PlayerInputManager.Instance.onJump += OnJump;	
+		PlayerInputManager.Instance.onMove += OnMove;
+		PlayerInputManager.Instance.onLook += OnLook;
 
 		_body = GetComponent<Rigidbody>();
 		_camera = GetComponentInChildren<Camera>();
+		_animator = GetComponentInChildren<Animator>();
 
 		if (!IsOwner) {
 			_camera.enabled = false;
@@ -30,6 +32,13 @@ public class Player : NetworkBehaviour
 		if (!IsOwner) return;
 
 		_body.linearVelocity = ((transform.forward * _movement.y + transform.right * _movement.x) * GameData.Instance.playerMoveSpeed) + Vector3.up * _body.linearVelocity.y;
+		if (_animator != null) {
+			if (_movement.magnitude > 0.1)
+				_animator.SetBool("Walk", true);
+
+			else
+				_animator.SetBool("Idle", true);
+		}
 	}
 
 	void OnJump() {
