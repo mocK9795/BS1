@@ -63,9 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Battle Simulator\Army\Follower.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
+    <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\GameFunctions.cs" />
