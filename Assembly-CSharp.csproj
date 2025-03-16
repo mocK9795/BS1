@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Follower.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
+    <Compile Include="Assets\Scripts\Battle Simulator\Army\Attacker.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />

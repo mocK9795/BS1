@@ -1,16 +1,23 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class Follower : Attacker
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+    Leader leader;
+    bool isFollowing;
+
+    public void Link(Leader newLeader) 
+    { 
+        leader.follow -= OnCommand;
+        newLeader.follow += OnCommand;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UnLink() { 
+        leader.follow -= OnCommand; 
+    }
+
+    public void OnCommand(Vector3 position, Attacker enemey)
     {
-        
+
     }
 }

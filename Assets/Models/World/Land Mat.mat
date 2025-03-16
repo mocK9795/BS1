@@ -71,13 +71,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_4C3F5EE4: 98.8
-    - Vector1_5857EFB5: 277.5
-    - Vector1_65D18AD4: 530
-    - Vector1_6F228B9F: 193.4
-    - Vector1_A956083A: 636
+    - Vector1_4C3F5EE4: -42
+    - Vector1_5857EFB5: 261.8
+    - Vector1_65D18AD4: 522.1
+    - Vector1_6F228B9F: 116.7
+    - Vector1_A956083A: 580.4
+    - _NoiseScale: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Tile: 0.2
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

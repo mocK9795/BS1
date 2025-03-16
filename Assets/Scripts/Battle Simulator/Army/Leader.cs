@@ -1,16 +1,18 @@
+using System;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Leader : MonoBehaviour
+public class Leader : Attacker
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+	public Action<Vector3, Attacker> follow;
+	NavMeshAgent agent;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public override void OnNetworkSpawn()
+	{
+		base.OnNetworkSpawn();
+		agent = GetComponent<NavMeshAgent>();
+	}
 }
+
+public enum OrderLevel {Low, Basic, Important, Critical, Forced}

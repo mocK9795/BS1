@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : NetworkBehaviour
+public class Player : Leader
 {
 	Rigidbody _body;
 	Camera _camera;
