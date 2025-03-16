@@ -71,11 +71,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_4C3F5EE4: 62.8
-    - Vector1_5857EFB5: 353.4
-    - Vector1_65D18AD4: 627
-    - Vector1_6F228B9F: 178.1
-    - Vector1_A956083A: 655.4
+    - Vector1_4C3F5EE4: 98.8
+    - Vector1_5857EFB5: 277.5
+    - Vector1_65D18AD4: 530
+    - Vector1_6F228B9F: 193.4
+    - Vector1_A956083A: 636
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors: []
