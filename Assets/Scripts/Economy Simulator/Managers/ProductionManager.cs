@@ -4,7 +4,7 @@ public class ProductionManager : BaseManager
 {
     public override void Tick() 
     {
-        
+        ExtractProducts();
     }
 
     void ExtractProducts()
