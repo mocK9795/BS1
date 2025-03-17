@@ -1020,10 +1020,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4fea8480865d7a54b9b2e157a05130fe, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1242667274}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4fea8480865d7a54b9b2e157a05130fe, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1242667275}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4fea8480865d7a54b9b2e157a05130fe, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1242667274}
+      addedObject: {fileID: 1242667276}
   m_SourcePrefab: {fileID: 100100000, guid: 4fea8480865d7a54b9b2e157a05130fe, type: 3}
 --- !u!1 &1242667273 stripped
 GameObject:
@@ -1068,6 +1071,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &1242667276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242667273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822fd6059e19d9744853fa4e2b0be41f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  nation: 
+  net_nation:
+    m_InternalValue: 
 --- !u!1 &1249770405
 GameObject:
   m_ObjectHideFlags: 0
