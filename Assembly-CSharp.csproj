@@ -63,16 +63,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Economy Simulator\Managers\ProductionManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Follower.cs" />
+    <Compile Include="Assets\Scripts\Economy Simulator\Production\EconomyObject.cs" />
+    <Compile Include="Assets\Scripts\Economy Simulator\Production\Extractor.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Attacker.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
+    <Compile Include="Assets\Scripts\Economy Simulator\Good.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\GameFunctions.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\Political Simulator\Nationality.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

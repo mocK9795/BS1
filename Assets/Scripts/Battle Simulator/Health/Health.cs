@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Health : NetworkBehaviour
 {
-	public NetworkVariable<float> health;
+	public NetworkVariable<float> net_health;
 
 	public override void OnNetworkSpawn()
 	{
 		base.OnNetworkSpawn();
-		health = new(10, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+		net_health = new(10, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 	}
 }

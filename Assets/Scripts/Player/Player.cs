@@ -1,28 +1,28 @@
 using Unity.Netcode;
 using UnityEngine;
+using GameFunctions;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Player : Leader
+public class Player : NetworkBehaviour, IReceivePlayerJump, IReceivePlayerLook, IReceivePlayerMove
 {
-	Rigidbody _body;
-	Camera _camera;
-	Animator _animator;
-
 	Vector2 _movement;
+	Camera _camera;
+	CharacterController _controller;
 
 	public override void OnNetworkSpawn()
 	{
 		base.OnNetworkSpawn();
 
-		PlayerInputManager.Instance.onJump += OnJump;	
-		PlayerInputManager.Instance.onMove += OnMove;
-		PlayerInputManager.Instance.onLook += OnLook;
+		_camera = GetComponent<Camera>();
+		_controller = GetComponent<CharacterController>();
 
-		_body = GetComponent<Rigidbody>();
-		_camera = GetComponentInChildren<Camera>();
-		_animator = GetComponentInChildren<Animator>();
-
-		if (!IsOwner) {
+		if (IsOwner)
+		{
+			PlayerInputManager.Instance.Subscribe(this as IReceivePlayerJump);
+			PlayerInputManager.Instance.Subscribe(this as IReceivePlayerMove);
+			PlayerInputManager.Instance.Subscribe(this as IReceivePlayerLook);
+		}
+		else
+		{
 			_camera.enabled = false;
 		}
 	}
@@ -30,30 +30,24 @@ public class Player : Leader
 	private void Update()
 	{
 		if (!IsOwner) return;
-
-		_body.linearVelocity = ((transform.forward * _movement.y + transform.right * _movement.x) * GameData.Instance.playerMoveSpeed) + Vector3.up * _body.linearVelocity.y;
-		if (_animator != null) {
-			if (_movement.magnitude > 0.1)
-				_animator.SetBool("Walk", true);
-
-			else
-				_animator.SetBool("Idle", true);
-		}
+		_controller.Move(
+			Time.deltaTime * GameData.Instance.playerMoveSpeed * 
+			(_movement.y * transform.forward + _movement.x * transform.right)
+		);
 	}
 
-	void OnJump() {
-		if (!IsOwner) return;
-		_body.linearVelocity += Vector3.up * GameData.Instance.playerJumpHeight;
-	}
-	void OnMove(Vector2 value)
+	public void OnPlayerJump() 
 	{
 		if (!IsOwner) return;
-        _movement = value;
 	}
-	void OnLook(Vector2 value) {
+	public void OnPlayerLook(Vector2 value) 
+	{
 		if (!IsOwner) return;
-		_camera.transform.rotation = 
-			Quaternion.Euler(new Vector3(value.x, 0) + _camera.transform.eulerAngles);
-		transform.rotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, value.y));
+		_camera.transform.rotation = Quaternion.Euler(_camera.transform.eulerAngles + Basic.vector3(value));
 	}
+	public void OnPlayerMove(Vector2 value) { 
+		if (!IsOwner) return;
+		_movement = value;
+	}
+
 }
