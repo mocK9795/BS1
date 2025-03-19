@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface Inspectable
 {
-	public string GetInpectableData();
+	public string GetInspectableData();
 }

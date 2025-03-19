@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Economy Simulator\Production\EconomyObject.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\Core\FlagEnumAttribute.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Extractor.cs" />
+    <Compile Include="Assets\Scripts\UI\Object Inspection\Popup.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeHelper.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Attacker.cs" />

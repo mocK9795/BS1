@@ -7,6 +7,8 @@ public class Player : NetworkBehaviour
 {
 	[SerializeField] GameObject placementPrefab;
 	[SerializeField] float maxPlaceDistance;
+	enum Mode {Political, Battle, Economic}
+	[SerializeField] Mode mode;
 
 	Vector2 _movement;
 	Camera _camera;
@@ -24,7 +26,7 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerJump += OnPlayerJump;
 			PlayerInputManager.Instance.onPlayerMove += OnPlayerMove;
 			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
-			PlayerInputManager.Instance.onPlayerClick += OnPlayerBuild;
+			PlayerInputManager.Instance.onPlayerClick += OnPlayerInspect;
 		}
 		else
 		{
@@ -53,6 +55,14 @@ public class Player : NetworkBehaviour
 	void OnPlayerMove(Vector2 value) { 
 		if (!IsOwner) return;
 		_movement = value;
+	}
+
+	void OnPlayerInspect() 
+	{
+		RaycastHit hit = CastRay();
+		if (hit.collider == null) return;
+		print("Inspecting " + hit.collider.gameObject.name);
+		Inspector.Instance.Inspect(hit.collider.gameObject);
 	}
 
 	void OnPlayerBuild()

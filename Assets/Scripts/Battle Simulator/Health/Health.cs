@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class Health : NetworkBehaviour
+public class Health : NetworkBehaviour, Inspectable
 {
 	public NetworkVariable<float> net_health;
 
@@ -9,5 +9,10 @@ public class Health : NetworkBehaviour
 	{
 		base.OnNetworkSpawn();
 		net_health = new(10, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+	}
+
+	public string GetInspectableData()
+	{
+		return "Health " + net_health.Value.ToString();
 	}
 }
