@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using GameFunctions;
-using System.Collections.Generic;
 
 public class PlayerInputManager : MonoBehaviour
 {
@@ -13,8 +12,13 @@ public class PlayerInputManager : MonoBehaviour
 	public Action onPlayerClick;
 	public Action<Vector2> onPlayerMove;
 	public Action<Vector2> onPlayerLook;
-	public Vector2 mousePosition;
+	public Vector2 mousePosition { get; private set; }
+	public bool mouseDown { get; private set; }
 	
+	public bool isDraging { get; private set; }
+	public float dragThresshold;
+	float currentDrag;
+
 	EventSystem eventSystem;
 
 	private void Start()
@@ -41,11 +45,21 @@ public class PlayerInputManager : MonoBehaviour
 	{
 		Vector2 lookValue = Basic.LookValue(value.ReadValue<Vector2>());
 		onPlayerLook?.Invoke(lookValue);
+
+		if (mouseDown) {
+			currentDrag += lookValue.magnitude;
+			if (currentDrag > dragThresshold) isDraging = true; 
+		} 
 	}
 
 	public void OnClick(InputAction.CallbackContext value)
 	{
+		mouseDown = !value.canceled;
 		if (!value.canceled) return;
+
+		isDraging = false;
+		currentDrag = 0;
+
 		onPlayerClick?.Invoke();
 	} 
 
