@@ -10,11 +10,8 @@ public class Extractor : EconomyObject
 		base.OnNetworkSpawn();
 	}
 
-	public List<Good> GetProduction()
+	public void Produce()
 	{
 		stockPile.Add(extractionProducts);
-		List<Good> result = new List<Good>(stockPile.pile);
-		stockPile.pile.Clear();
-		return result;
 	}
 }

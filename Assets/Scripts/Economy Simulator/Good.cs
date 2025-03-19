@@ -9,12 +9,27 @@ public struct Good
 	public bool Equals(Good other) { return other.name == name; }
 	public bool Contains(Good other) { return other.name == name && quantity >= other.quantity;}
 
-	// Summary:
-	//		Returns true if addition was valid
+	
+	/// <summary>
+	/// Returns true if addition was valid
+	/// </summary>
+	/// <param name="other"></param>
+	/// <returns></returns>
 	public bool Add(Good other) 
 	{
 		if (Equals(other)) { quantity += other.quantity; return true; }
 		return false;
+	}
+
+	/// <summary>
+	/// Returns true if subtraction was valid
+	/// </summary>
+	/// <param name="other"></param>
+	/// <returns></returns>
+	public bool Subtract(Good other)
+	{
+		if (!Contains(other)) { return false; }
+		quantity -= other.quantity; return true;
 	}
 }
 
@@ -30,17 +45,47 @@ public struct StockPile
 		}
 		pile.Add(good);
 	}
-
-	public void Add(Good[] goods)
+	public bool Subtract(Good other)
+	{
+		if (!Contains(other)) return false;
+		foreach (var good in pile)
+		{
+			good.Subtract(other);
+		}
+		return false;
+	}
+	public bool Contains(Good other)
+	{
+		foreach (var good in pile)
+		{
+			if (good.Contains(other)) return true;
+		}
+		return false;
+	} 
+	public bool Contains(IEnumerable<Good> other)
+	{
+		foreach (var good in other)
+		{
+			if (!Contains(good)) return false;
+		}
+		return true;
+	}
+	public void Subtract(IEnumerable<Good> cost)
+	{
+		foreach (var good in cost)
+		{
+			if (Subtract(good)) return;
+		}
+	}
+	public void Add(IEnumerable<Good> goods)
 	{
 		foreach (Good good in goods)
 		{
 			Add(good);
 		}
 	}
-
 	public void Add(StockPile otherPile)
 	{
-		Add(otherPile.pile.ToArray());
+		Add(otherPile.pile);
 	}
 }

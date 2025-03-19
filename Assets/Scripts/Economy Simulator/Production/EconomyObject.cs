@@ -1,10 +1,9 @@
 using Unity.Netcode;
-using UnityEngine;
 using System.Collections.Generic;
 
 public class EconomyObject : NetworkBehaviour
 {
-	protected StockPile stockPile = new();
+	public StockPile stockPile = new();
 	public void StockPile(Good good)
 	{
 		stockPile.Add(good);
