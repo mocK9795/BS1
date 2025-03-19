@@ -18,6 +18,7 @@ public struct Good
 	}
 }
 
+[System.Serializable]
 public struct StockPile
 {
 	public List<Good> pile;
@@ -36,5 +37,10 @@ public struct StockPile
 		{
 			Add(good);
 		}
+	}
+
+	public void Add(StockPile otherPile)
+	{
+		Add(otherPile.pile.ToArray());
 	}
 }

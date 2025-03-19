@@ -12,6 +12,9 @@ public class Extractor : EconomyObject
 
 	public List<Good> GetProduction()
 	{
-		return new(extractionProducts.pile);
+		stockPile.Add(extractionProducts);
+		List<Good> result = new List<Good>(stockPile.pile);
+		stockPile.pile.Clear();
+		return result;
 	}
 }

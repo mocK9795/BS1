@@ -17,6 +17,7 @@ public class ProductionManager : BaseManager
             if (nationality == null)
             {
                 extractor.StockPile(extractor.GetProduction());
+                continue;
             }
         }
     }

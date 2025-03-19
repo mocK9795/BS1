@@ -1,9 +1,13 @@
 using Unity.Netcode;
 using UnityEngine;
 using GameFunctions;
+using UnityEngine.Rendering;
 
-public class Player : NetworkBehaviour, IReceivePlayerJump, IReceivePlayerLook, IReceivePlayerMove
+public class Player : NetworkBehaviour
 {
+	[SerializeField] GameObject placementPrefab;
+	[SerializeField] float maxPlaceDistance;
+
 	Vector2 _movement;
 	Camera _camera;
 	CharacterController _controller;
@@ -17,9 +21,10 @@ public class Player : NetworkBehaviour, IReceivePlayerJump, IReceivePlayerLook, 
 
 		if (IsOwner)
 		{
-			PlayerInputManager.Instance.Subscribe(this as IReceivePlayerJump);
-			PlayerInputManager.Instance.Subscribe(this as IReceivePlayerMove);
-			PlayerInputManager.Instance.Subscribe(this as IReceivePlayerLook);
+			PlayerInputManager.Instance.onPlayerJump += OnPlayerJump;
+			PlayerInputManager.Instance.onPlayerMove += OnPlayerMove;
+			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
+			PlayerInputManager.Instance.onPlayerClick += OnPlayerBuild;
 		}
 		else
 		{
@@ -36,18 +41,36 @@ public class Player : NetworkBehaviour, IReceivePlayerJump, IReceivePlayerLook, 
 		);
 	}
 
-	public void OnPlayerJump() 
+	void OnPlayerJump() 
 	{
 		if (!IsOwner) return;
 	}
-	public void OnPlayerLook(Vector2 value) 
+	void OnPlayerLook(Vector2 value) 
 	{
 		if (!IsOwner) return;
 		_camera.transform.rotation = Quaternion.Euler(_camera.transform.eulerAngles + Basic.vector3(value));
 	}
-	public void OnPlayerMove(Vector2 value) { 
+	void OnPlayerMove(Vector2 value) { 
 		if (!IsOwner) return;
 		_movement = value;
+	}
+
+	void OnPlayerBuild()
+	{
+		RaycastHit hit = CastRay();
+		if (hit.collider == null) return;
+
+		GameObject instantiatedObj = Instantiate(placementPrefab, GameData.Instance.objectTransform);
+
+		instantiatedObj.transform.position = hit.point;
+		instantiatedObj.transform.up = hit.normal;
+	}
+
+	RaycastHit CastRay()
+	{
+		Ray ray = _camera.ScreenPointToRay(PlayerInputManager.Instance.mousePosition);
+		Physics.Raycast(ray, out RaycastHit hit, maxPlaceDistance);
+		return hit;
 	}
 
 }

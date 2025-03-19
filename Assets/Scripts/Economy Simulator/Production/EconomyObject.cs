@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EconomyObject : NetworkBehaviour
 {
-	StockPile stockPile = new();
+	protected StockPile stockPile = new();
 	public void StockPile(Good good)
 	{
 		stockPile.Add(good);
