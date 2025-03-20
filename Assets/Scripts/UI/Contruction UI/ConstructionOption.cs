@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ContructionOption : MonoBehaviour
+public class ConstructionOption : MonoBehaviour
 {
     public Sprite contructionSprite;
     public string contructionPrefab;
@@ -14,6 +14,6 @@ public class ContructionOption : MonoBehaviour
 
 	void OnSelect()
 	{
-		ContructionOptionsManager.Instance.OnContructionOptionSelect(contructionPrefab);
+		ConstructionOptionsManager.Instance.OnContructionOptionSelect(contructionPrefab);
 	}
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using System.Linq;
 
-public class ContructionOptionsManager : MonoBehaviour
+public class ConstructionOptionsManager : MonoBehaviour
 {
-	public static ContructionOptionsManager Instance;
+	public static ConstructionOptionsManager Instance;
 
     [SerializeField] string modelPreviewPath;
 
@@ -21,7 +21,7 @@ public class ContructionOptionsManager : MonoBehaviour
 		else { Instance = this;}
 
 		Sprite[] contructionPreviews = Resources.LoadAll<Sprite>(modelPreviewPath);
-		GameObject[] contructionPrefabs = Resources.LoadAll<GameObject>(ContructionManager.Instance.modelPrefabPath);
+		GameObject[] contructionPrefabs = Resources.LoadAll<GameObject>(ConstructionManager.Instance.modelPrefabPath);
 
 		if (contructionPreviews.Length != contructionPrefabs.Length) Debug.LogError("Prefabs & Previews Mismatch");
 
@@ -31,7 +31,7 @@ public class ContructionOptionsManager : MonoBehaviour
 		for (int i = 0; i < contructionPreviews.Length; i++)
 		{
 			GameObject uiElement = Instantiate(optionPrefab, optionContainer);
-			ContructionOption option = uiElement.GetComponentInChildren<ContructionOption>();
+			ConstructionOption option = uiElement.GetComponentInChildren<ConstructionOption>();
 			option.contructionSprite = contructionPreviews[i];
 			option.contructionPrefab = contructionPrefabs[i].name;
 		}

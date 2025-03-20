@@ -1,14 +1,12 @@
 using UnityEngine;
-using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Collections;
-using Unity.VisualScripting;
 using System;
 
-public class ContructionManager : BaseManager
+public class ConstructionManager : BaseManager
 {
-	public static ContructionManager Instance;
-	public NetworkList<Contruction> contructedObjects;
+	public static ConstructionManager Instance;
+	public NetworkList<Construction> contructedObjects;
 	public string modelPrefabPath { get { return _modelPrefabPath; } }
 	[SerializeField] string _modelPrefabPath;
 	GameObject[] _prefabs;
@@ -26,7 +24,7 @@ public class ContructionManager : BaseManager
 	{
 		if (contructedObjects.Count == 0) return;
 		
-		Contruction contructedObj = contructedObjects[0];
+		Construction contructedObj = contructedObjects[0];
 		string contructedObjName = contructedObj.name.ToString();
 		contructedObjects.RemoveAt(0);
 
@@ -40,7 +38,7 @@ public class ContructionManager : BaseManager
 	}
 
 	[ServerRpc]
-	public void AddContructionServerRpc(Contruction item)
+	public void AddContructionServerRpc(Construction item)
 	{
 		contructedObjects.Add(item);
 	}
@@ -56,8 +54,8 @@ public class ContructionManager : BaseManager
 	} 
 }
 
-[System.Serializable]
-public struct Contruction : IEquatable<Contruction>
+[Serializable]
+public struct Construction : INetworkSerializable, IEquatable<Construction>
 {
 	public FixedString64Bytes name;
 	public Vector3 position;
@@ -70,23 +68,31 @@ public struct Contruction : IEquatable<Contruction>
 		serializer.SerializeValue(ref up);
 	}
 
+	public bool Equals(Construction other)
+	{
+		return name.Equals(other.name) &&
+			   position.Equals(other.position) &&
+			   up.Equals(other.up);
+	}
+
 	public override bool Equals(object obj)
 	{
-		return name == ((Contruction)obj).name && ((Contruction)obj).position == position;
+		if (obj is Construction other)
+		{
+			return Equals(other);
+		}
+		return false;
 	}
 
-	public override bool Equals(Contruction obj)
+	public override int GetHashCode()
 	{
-		return name == ((Contruction)obj).name && ((Contruction)obj).position == position;
-	}
-
-	public static bool operator ==(Contruction left, Contruction right)
-	{
-		return left.Equals(right);
-	}
-
-	public static bool operator !=(Contruction left, Contruction right)
-	{
-		return !(left == right);
+		unchecked
+		{
+			int hash = 17;
+			hash = hash * 31 + name.GetHashCode();
+			hash = hash * 31 + position.GetHashCode();
+			hash = hash * 31 + up.GetHashCode();
+			return hash;
+		}
 	}
 }
