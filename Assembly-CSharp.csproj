@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Attacker.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
+    <Compile Include="Assets\Scripts\UI\ColorPalatte.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Good.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspectable.cs" />
