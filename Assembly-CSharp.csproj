@@ -62,8 +62,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.29f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Economy Simulator\Managers\ContructionManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\GameManager.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBox.cs" />
+    <Compile Include="Assets\Scripts\UI\Contruction UI\ContructionOption.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBase.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Managers\ProductionManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Follower.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspector.cs" />
+    <Compile Include="Assets\Scripts\UI\Contruction UI\ContructionOptionsManager.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\GameFunctions.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Storage.cs" />
