@@ -33,49 +33,42 @@ public class Inspector : MonoBehaviour
 
         foreach (var inspectable in allInspectableObject)
         {
-            string data = inspectable.GetInspectableData();
+            InspectionData data = inspectable.GetInspectableData();
+            string message = data.data;
+
             GameObject inspectionUI = Instantiate(_popupPrefab,
                 (_utilizeWorldCanvas) 
                 ? GameData.Instance.worldCanvasTransform : GameData.Instance.canvasTransform);
 
-            inspectionUI.GetComponentInChildren<TMP_Text>().text = data;
-            _activeInspectionUI.Add(inspectionUI.GetComponent<RectTransform>());
+            inspectionUI.GetComponentInChildren<TMP_Text>().text = message;
+            RectTransform inspectionUITransform = inspectionUI.GetComponent<RectTransform>();
+			_activeInspectionUI.Add(inspectionUITransform);
 
             if (layout == InspectionLayout.LayoutGroup)
             inspectionUI.transform.SetParent(_popupGroup, false);
+
+			SetUISize(inspectionUITransform, data.aspectRatio);
 		}
 
-        if (layout == InspectionLayout.AroundMouse) PositionUIAroundMouse();
+		if (layout == InspectionLayout.AroundMouse) PositionUIAroundMouse();
         if (_utilizeWorldCanvas) SetWorldCanvasData(inspectedObject);
-		SetUISize();
-
 	}
 
 
 	void PositionUIAroundMouse()
     {
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(
-				_popupGroup,
-				PlayerInputManager.Instance.mousePosition,
-				PlayerInputManager.Instance.localPlayerCamera,
-				out Vector2 localPoint
-		);
-
 		int elementCount = _activeInspectionUI.Count;
 		for (int i = 0; i < elementCount; i++)
 		{
 			float angle = i * Mathf.PI * 2f / elementCount; // Evenly distribute around a circle
 			Vector3 offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * _radius;
 
-			_activeInspectionUI[i].anchoredPosition = localPoint + (Vector2)offset;
+			_activeInspectionUI[i].anchoredPosition = (Vector2)offset;
 		}
 	}
-    void SetUISize()
+    void SetUISize(RectTransform inspectionUI, Vector2 aspectRatio)
     {
-        foreach (var inspectionUI in _activeInspectionUI)
-        {
-            inspectionUI.sizeDelta = _popupSize;
-        }
+        inspectionUI.sizeDelta = _popupSize * aspectRatio;
     }
     void SetWorldCanvasData(GameObject inspectedObject)
     {

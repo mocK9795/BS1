@@ -11,8 +11,8 @@ public class Health : NetworkBehaviour, Inspectable
 		net_health = new(10, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
 	}
 
-	public string GetInspectableData()
+	public InspectionData GetInspectableData()
 	{
-		return "Health " + net_health.Value.ToString();
+		return new("Health " + net_health.Value.ToString());
 	}
 }

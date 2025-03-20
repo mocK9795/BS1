@@ -13,9 +13,11 @@ public class EconomyObject : NetworkBehaviour, Inspectable
 		this.stockPile.Add(stockPile.ToArray());
 	}
 
-	public string GetInspectableData()
+	public InspectionData GetInspectableData()
 	{
-		return "Economy Object\n" +
-			"Stockpile has " + stockPile.pile.Count.ToString() + " items left";
+		string message = "Economy Object\n Stockpile has " 
+						+ stockPile.pile.Count.ToString() 
+						+ " items left";
+		return new(message, new(1, 2));
 	}
 }

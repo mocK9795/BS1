@@ -40,8 +40,14 @@ public struct StockPile
 
 	public void Add(Good good)
 	{
-		foreach (Good other in pile) {
-			if (other.Add(good)) return;
+		for (int i = 0; i < pile.Count; i++)
+		{
+			Good pileItem = pile[i];
+			if (pileItem.Add(good))
+			{
+				pile[i] = pileItem;
+				return;
+			}
 		}
 		pile.Add(good);
 	}

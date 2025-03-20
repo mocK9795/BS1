@@ -5,10 +5,11 @@ using UnityEngine;
 public class Nationality : NetworkBehaviour, Inspectable
 {
     [SerializeField] string nation;
-    [HideInInspector] public NetworkVariable<FixedString32Bytes> net_nation = null;
+    [HideInInspector] public NetworkVariable<FixedString32Bytes> net_nation;
 
 	public override void OnNetworkSpawn()
 	{
+		if (!IsServer) return;
 		base.OnNetworkSpawn();
 		ApplyNationality();
 	}
@@ -19,8 +20,8 @@ public class Nationality : NetworkBehaviour, Inspectable
 		net_nation.Value = nation;
 	}
 
-	public string GetInspectableData()
+	public InspectionData GetInspectableData()
 	{
-		return "Nationality " + net_nation.Value.ToString();
+		return new("Nationality " + net_nation.Value.ToString());
 	}
 }

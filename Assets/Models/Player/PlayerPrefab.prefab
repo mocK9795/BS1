@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2065938156
+  GlobalObjectIdHash: 2572912654
   InScenePlacedSourceGlobalObjectIdHash: 2065938156
   DeferredDespawnTick: 0
   Ownership: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkTransformExpanded: 0
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
@@ -85,9 +85,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -233,3 +233,4 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   placementPrefab: {fileID: 919132149155446097, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
   maxPlaceDistance: 115
+  mode: 0
