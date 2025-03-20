@@ -60,10 +60,10 @@ public class Player : NetworkBehaviour
 	{
 		if (isInspecting)
 		{
-			if (!_raycast.collider) return;
-			if (_raycast.collider.gameObject.GetInstanceID() 
-				!= initialyInspectedObject.GetInstanceID()) 
-				return;
+			if (_raycast.collider &&
+			_raycast.collider.gameObject.GetInstanceID() 
+			== initialyInspectedObject.GetInstanceID()) 
+			return;
 
 			Inspector.Instance.ClearInspection();
 			isInspecting = false;
@@ -88,12 +88,12 @@ public class Player : NetworkBehaviour
 	{
 		if (_raycast.collider == null) return;
 		GameObject inspectedObject = _raycast.collider.gameObject;
+		initialyInspectedObject = inspectedObject;
 
 		if (inspectedObject.GetComponentsInChildren<Inspectable>().Length == 0) 
 			inspectedObject = inspectedObject.transform.parent.gameObject;
 
 		Inspector.Instance.Inspect(inspectedObject);
-		initialyInspectedObject = inspectedObject;
 		isInspecting = true;
 	}
 
