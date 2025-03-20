@@ -27,6 +27,7 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerMove += OnPlayerMove;
 			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
 			PlayerInputManager.Instance.onPlayerClick += OnPlayerInspect;
+			PlayerInputManager.Instance.localPlayerCamera = _camera;
 		}
 		else
 		{

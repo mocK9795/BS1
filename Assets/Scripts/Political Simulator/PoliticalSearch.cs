@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 using UnityEngine;
 
 public class PoliticalSearch : MonoBehaviour
@@ -10,7 +11,7 @@ public class PoliticalSearch : MonoBehaviour
 	/// <param name="nationality"></param>
 	/// <param name="location"></param>
 	/// <returns></returns>
-	public static T Find<T>(string nationality, Vector3 location) where T : MonoBehaviour
+	public static T Find<T>(FixedString32Bytes nationality, Vector3 location) where T : MonoBehaviour
     {
 		T[] allScripts = FindObjectsByType<T>(FindObjectsSortMode.None);
 		T closest = null;

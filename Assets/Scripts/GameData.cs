@@ -6,11 +6,13 @@ public class GameData : MonoBehaviour
 	[SerializeField] float _playerJumpHeight;
 	[SerializeField] float _playerMoveSpeed;
 	[SerializeField] Transform _objectTransform;
-	[SerializeField] Transform _canvasTransform;
+	[SerializeField] RectTransform _canvasTransform;
+	[SerializeField] RectTransform _worldCanvasTransform;
 
 	public float playerJumpHeight { get { return _playerJumpHeight; } }
 	public float playerMoveSpeed { get { return _playerMoveSpeed; } }
-	public Transform canvasTransform { get { return _canvasTransform; } }
+	public RectTransform canvasTransform { get { return _canvasTransform; } }
+	public RectTransform worldCanvasTransform {  get { return _worldCanvasTransform; } }
 
 	public Transform objectTransform { get { return _objectTransform; } }
 

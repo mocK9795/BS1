@@ -14,10 +14,11 @@ public class PlayerInputManager : MonoBehaviour
 	public Action<Vector2> onPlayerLook;
 	public Vector2 mousePosition { get; private set; }
 	public bool mouseDown { get; private set; }
-	
 	public bool isDraging { get; private set; }
 	public float dragThresshold;
 	float currentDrag;
+
+	public Camera localPlayerCamera;
 
 	EventSystem eventSystem;
 
