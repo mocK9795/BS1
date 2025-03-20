@@ -7,7 +7,7 @@ public class ConstructionOptionsManager : MonoBehaviour
 {
 	public static ConstructionOptionsManager Instance;
 
-    [SerializeField] string modelPreviewPath;
+	[SerializeField] string modelPreviewPath;
 
 	[Space(1)]
 	[SerializeField] RectTransform optionContainer;
@@ -17,8 +17,8 @@ public class ConstructionOptionsManager : MonoBehaviour
 
 	private void Start()
 	{
-		if (Instance) {Destroy(Instance); Instance = this; }
-		else { Instance = this;}
+		if (Instance) { Destroy(Instance); Instance = this; }
+		else { Instance = this; }
 
 		Sprite[] contructionPreviews = Resources.LoadAll<Sprite>(modelPreviewPath);
 		GameObject[] contructionPrefabs = Resources.LoadAll<GameObject>(ConstructionManager.Instance.modelPrefabPath);
@@ -42,3 +42,4 @@ public class ConstructionOptionsManager : MonoBehaviour
 		selectedPrefab = prefab;
 	}
 }
+

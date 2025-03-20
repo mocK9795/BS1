@@ -82,8 +82,10 @@
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspectable.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />
+    <Compile Include="Assets\Scripts\UI\Contruction UI\ConstructionOption.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspector.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />
+    <Compile Include="Assets\Scripts\UI\Contruction UI\ConstructionOptionsManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\GameFunctions.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Storage.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
