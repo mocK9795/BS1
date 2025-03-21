@@ -3,20 +3,19 @@ using UnityEngine;
 public class GameData : MonoBehaviour
 {
 	[Header("Player Settings")]
-	[SerializeField] float _playerZoomSpeedBonus;
-	[SerializeField] float _playerMoveSpeed;
-	[SerializeField] float _playerZoomSpeed;
-	[SerializeField] Transform _objectTransform;
-	[SerializeField] RectTransform _canvasTransform;
-	[SerializeField] RectTransform _worldCanvasTransform;
+	public float playerZoomSpeedBonus;
+	public float playerMoveSpeed;
+	public float playerZoomSpeed;
+	public Vector3 topdownRotation;
 
-	public float playerZoomSpeed { get { return _playerZoomSpeed; } }
-	public float playerZoomSpeedBonus { get { return _playerZoomSpeedBonus; } }
-	public float playerMoveSpeed { get { return _playerMoveSpeed; } }
-	public RectTransform canvasTransform { get { return _canvasTransform; } }
-	public RectTransform worldCanvasTransform {  get { return _worldCanvasTransform; } }
+	[Header("attacker Settings")]
+	public float attackerSpeed;
+	public float gravity;
 
-	public Transform objectTransform { get { return _objectTransform; } }
+	[Header("Global Transforms")]
+	public Transform objectTransform;
+	public RectTransform canvasTransform;
+	public RectTransform worldCanvasTransform;
 
 	public static GameData Instance;
 

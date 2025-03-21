@@ -6,13 +6,13 @@ using UnityEngine.Rendering;
 public class Player : NetworkBehaviour
 {
 	[SerializeField] float _maxInteractionDistance;
-	enum Mode { Political, Battle, Economic }
+	enum Mode { Political, Battle, Economic}
 	[SerializeField] Mode mode;
 
-	enum MovementMode { Free, Topdown }
+	enum MovementMode { Free, Topdown, Lead}
 	[SerializeField] MovementMode movementMode;
 
-	public enum PlayerInteraction { InspectMode, BuildMode, Lead }
+	public enum PlayerInteraction { InspectMode, BuildMode, Lead}
 	public PlayerInteraction interactionMode;
 
 	Vector2 _movement;
@@ -23,11 +23,13 @@ public class Player : NetworkBehaviour
 
 	RaycastHit _raycast;
 
+	// Inspect Mode
 	bool isInspecting;
 	GameObject initialyInspectedObject;
 
+	// Lead Mode
 	bool isLeading;
-	GameObject leader;
+	Leader leader;
 
 	public override void OnNetworkSpawn()
 	{
@@ -43,7 +45,7 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
 			PlayerInputManager.Instance.onPlayerClick += OnPlayerInteraction;
 			PlayerInputManager.Instance.localPlayerCamera = _camera;
-			TabManager.Instance.onTabSelectionChange += (mode) => { interactionMode = mode; };
+			TabManager.Instance.onTabSelectionChange += OnInteractionModeChange;
 		}
 		else
 		{
@@ -57,6 +59,7 @@ public class Player : NetworkBehaviour
 
 		if (movementMode == MovementMode.Free) FreeMovement();
 		if (movementMode == MovementMode.Topdown) TopDownMovement();
+		if (movementMode == MovementMode.Lead) LeadMovement();
 
 		_raycast = CastRay();
 		OnHover();
@@ -64,6 +67,14 @@ public class Player : NetworkBehaviour
 		ClearInspectionOnChange();
 	}
 
+	void LeadMovement()
+	{
+		if (!leader) return;
+		leader.MoveServerRpc(_movement);
+		leader.RotateServerRpc(transform.eulerAngles.y);
+		transform.position = leader.transform.position;
+		FreeRotation();
+	}
 
 	void FreeMovement()
 	{
@@ -71,6 +82,11 @@ public class Player : NetworkBehaviour
 			Time.deltaTime * GameData.Instance.playerMoveSpeed * 
 			(_movement.y * transform.forward + _movement.x * transform.right)
 		);
+		FreeRotation();
+	}
+
+	void FreeRotation()
+	{
 		transform.eulerAngles = transform.eulerAngles + new Vector3(_look.x, _look.y);
 		_look = Vector2.zero;
 	}
@@ -80,6 +96,7 @@ public class Player : NetworkBehaviour
 		if (!IsOwner) return;
 
 		if (interactionMode == PlayerInteraction.BuildMode) OnPlayerBuild();
+		if (interactionMode == PlayerInteraction.Lead) OnPlayerLead();
 	}
 
 	void OnHover()
@@ -160,9 +177,27 @@ public class Player : NetworkBehaviour
 		ConstructionManager.Instance.AddContructionServerRpc(construction);
 	}
 
-	void OnLead()
+	void OnPlayerLead()
 	{
+		if (!leader) AssignLeader();
+	}
 
+	void AssignLeader()
+	{
+		if (!_raycast.collider) return;
+		Leader leaderComponent = _raycast.collider.GetComponent<Leader>();
+		if (!leaderComponent && _raycast.collider.transform.parent)
+			leaderComponent = _raycast.collider.transform.parent.GetComponent<Leader>();
+		leader = leaderComponent;
+		movementMode = MovementMode.Lead;
+	}
+
+	void OnInteractionModeChange(PlayerInteraction mode)
+	{
+		if (!IsOwner) return;
+		interactionMode = mode;
+		movementMode = MovementMode.Topdown;
+		transform.eulerAngles = GameData.Instance.topdownRotation;
 	}
 
 	RaycastHit CastRay()
