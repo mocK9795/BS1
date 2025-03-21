@@ -17,6 +17,7 @@ public class Inspector : MonoBehaviour
     [SerializeField] float _radius;
 
     List<RectTransform> _activeInspectionUI;
+    GameObject _activeInspectionObject = null;
 
 	private void Start()
 	{
@@ -28,7 +29,12 @@ public class Inspector : MonoBehaviour
 
 	public void Inspect(GameObject inspectedObject)
     {
+        if (_activeInspectionObject &&
+            _activeInspectionObject.GetInstanceID() == inspectedObject.GetInstanceID()) {
+            if (layout == InspectionLayout.AroundMouse) PositionUIAroundMouse(); return;
+        }
         ClearInspection();
+        _activeInspectionObject = inspectedObject;
         Inspectable[] allInspectableObject = inspectedObject.GetComponentsInChildren<Inspectable>();
 
         foreach (var inspectable in allInspectableObject)
@@ -58,12 +64,14 @@ public class Inspector : MonoBehaviour
 	void PositionUIAroundMouse()
     {
 		int elementCount = _activeInspectionUI.Count;
+		Vector2 canvasMousePosition = PlayerInputManager.Instance.mousePosition -
+	        (GameData.Instance.canvasTransform.sizeDelta * .5f);
 		for (int i = 0; i < elementCount; i++)
 		{
 			float angle = i * Mathf.PI * 2f / elementCount; // Evenly distribute around a circle
-			Vector3 offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * _radius;
+			Vector2 offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _radius;
 
-			_activeInspectionUI[i].anchoredPosition = (Vector2)offset;
+			_activeInspectionUI[i].anchoredPosition = offset + canvasMousePosition;
 		}
 	}
     void SetUISize(RectTransform inspectionUI, Vector2 aspectRatio)
@@ -84,6 +92,7 @@ public class Inspector : MonoBehaviour
             Destroy(inspectionUI.gameObject);
         }
 
+        _activeInspectionObject = null;
         _activeInspectionUI.Clear();
     }
 }

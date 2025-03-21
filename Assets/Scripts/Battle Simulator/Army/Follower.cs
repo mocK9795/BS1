@@ -10,10 +10,12 @@ public class Follower : Attacker
     { 
         leader.follow -= OnCommand;
         newLeader.follow += OnCommand;
+        leader = newLeader;
     }
 
     public void UnLink() { 
-        leader.follow -= OnCommand; 
+        leader.follow -= OnCommand;
+        leader = null;
     }
 
     public void OnCommand(Vector3 position, Attacker enemey)

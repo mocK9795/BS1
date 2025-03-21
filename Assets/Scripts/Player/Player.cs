@@ -5,20 +5,29 @@ using UnityEngine.Rendering;
 
 public class Player : NetworkBehaviour
 {
-	[SerializeField] GameObject placementPrefab;
-	[SerializeField] float maxPlaceDistance;
+	[SerializeField] float _maxInteractionDistance;
 	enum Mode { Political, Battle, Economic }
 	[SerializeField] Mode mode;
 
+	enum MovementMode { Free, Topdown }
+	[SerializeField] MovementMode movementMode;
+
+	public enum PlayerInteraction { InspectMode, BuildMode, Lead }
+	public PlayerInteraction interactionMode;
+
 	Vector2 _movement;
+	Vector2 _look;
+
 	Camera _camera;
 	CharacterController _controller;
 
 	RaycastHit _raycast;
 
-	//[Header("Economic Interactions")]
 	bool isInspecting;
 	GameObject initialyInspectedObject;
+
+	bool isLeading;
+	GameObject leader;
 
 	public override void OnNetworkSpawn()
 	{
@@ -32,8 +41,9 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerJump += OnPlayerJump;
 			PlayerInputManager.Instance.onPlayerMove += OnPlayerMove;
 			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
-			PlayerInputManager.Instance.onPlayerClick += OnPlayerInspect;
+			PlayerInputManager.Instance.onPlayerClick += OnPlayerInteraction;
 			PlayerInputManager.Instance.localPlayerCamera = _camera;
+			TabManager.Instance.onTabSelectionChange += (mode) => { interactionMode = mode; };
 		}
 		else
 		{
@@ -44,13 +54,53 @@ public class Player : NetworkBehaviour
 	private void Update()
 	{
 		if (!IsOwner) return;
-		_controller.Move(
-			Time.deltaTime * GameData.Instance.playerMoveSpeed *
-			(_movement.y * transform.forward + _movement.x * transform.right)
-		);
+
+		if (movementMode == MovementMode.Free) FreeMovement();
+		if (movementMode == MovementMode.Topdown) TopDownMovement();
+
 		_raycast = CastRay();
+		OnHover();
 
 		ClearInspectionOnChange();
+	}
+
+
+	void FreeMovement()
+	{
+		_controller.Move(
+			Time.deltaTime * GameData.Instance.playerMoveSpeed * 
+			(_movement.y * transform.forward + _movement.x * transform.right)
+		);
+		transform.eulerAngles = transform.eulerAngles + new Vector3(_look.x, _look.y);
+		_look = Vector2.zero;
+	}
+
+	void OnPlayerInteraction()
+	{
+		if (!IsOwner) return;
+
+		if (interactionMode == PlayerInteraction.BuildMode) OnPlayerBuild();
+	}
+
+	void OnHover()
+	{
+		if (interactionMode == PlayerInteraction.InspectMode) OnPlayerInspect();
+	}
+
+	void TopDownMovement()
+	{
+		_controller.Move(
+			Time.deltaTime * GameData.Instance.playerMoveSpeed *
+			GameData.Instance.playerZoomSpeedBonus * transform.position.y *
+			(_movement.y * Basic.XZPlane(transform.forward) +
+			_movement.x * Basic.XZPlane(transform.right))
+			);
+
+		if (PlayerInputManager.Instance.mouseDown)
+			_controller.Move(
+				Vector3.up * _look.x
+				* GameData.Instance.playerZoomSpeed
+				);
 	}
 
 	/// <summary>
@@ -77,7 +127,7 @@ public class Player : NetworkBehaviour
 	void OnPlayerLook(Vector2 value) 
 	{
 		if (!IsOwner) return;
-		_camera.transform.rotation = Quaternion.Euler(_camera.transform.eulerAngles + Basic.vector3(value));
+		_look = value;
 	}
 	void OnPlayerMove(Vector2 value) { 
 		if (!IsOwner) return;
@@ -90,7 +140,7 @@ public class Player : NetworkBehaviour
 		GameObject inspectedObject = _raycast.collider.gameObject;
 		initialyInspectedObject = inspectedObject;
 
-		if (inspectedObject.GetComponentsInChildren<Inspectable>().Length == 0) 
+		if (inspectedObject.GetComponentsInChildren<Inspectable>().Length == 0 && inspectedObject.transform.parent) 
 			inspectedObject = inspectedObject.transform.parent.gameObject;
 
 		Inspector.Instance.Inspect(inspectedObject);
@@ -99,18 +149,26 @@ public class Player : NetworkBehaviour
 
 	void OnPlayerBuild()
 	{
-		if (_raycast.collider == null) return;
+		if (_raycast.collider == null && !PlayerInputManager.Instance.isDraging) return;
 
-		GameObject instantiatedObj = Instantiate(placementPrefab, GameData.Instance.objectTransform);
+		Construction construction = new Construction(
+			ConstructionOptionsManager.Instance.selectedPrefab,
+			_raycast.point,
+			_raycast.normal
+			);
 
-		instantiatedObj.transform.position = _raycast.point;
-		instantiatedObj.transform.up = _raycast.normal;
+		ConstructionManager.Instance.AddContructionServerRpc(construction);
+	}
+
+	void OnLead()
+	{
+
 	}
 
 	RaycastHit CastRay()
 	{
 		Ray ray = _camera.ScreenPointToRay(PlayerInputManager.Instance.mousePosition);
-		Physics.Raycast(ray, out RaycastHit hit, maxPlaceDistance);
+		Physics.Raycast(ray, out RaycastHit hit, _maxInteractionDistance);
 		return hit;
 	}
 }

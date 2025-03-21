@@ -8,5 +8,9 @@ namespace GameFunctions
 		public static Vector2 Inverse(Vector2 value) { return value * -1; }
 		public static Vector2 LookValue(Vector2 value) { return new(-value.y, value.x); }
 		public static Vector3 vector3(Vector2 value) { return new(value.x, value.y); } 
+
+		public static Vector3 XYPlane(Vector3 value) { return new(value.x, value.y); }
+
+		public static Vector3 XZPlane(Vector3 value) { return new(value.x, 0, value.z); }
 	}
 }

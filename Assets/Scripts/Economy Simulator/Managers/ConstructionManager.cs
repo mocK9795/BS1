@@ -5,8 +5,8 @@ using System;
 
 public class ConstructionManager : BaseManager
 {
-	public static ConstructionManager Instance;
-	public NetworkList<Construction> contructedObjects;
+	public static ConstructionManager Instance = null;
+	public NetworkList<Construction> contructedObjects = new();
 	public string modelPrefabPath { get { return _modelPrefabPath; } }
 	[SerializeField] string _modelPrefabPath;
 	GameObject[] _prefabs;
@@ -15,9 +15,13 @@ public class ConstructionManager : BaseManager
 	{
 		base.OnNetworkSpawn();
 
-		contructedObjects = new();
-
 		if (IsServer) _prefabs = Resources.LoadAll<GameObject>(modelPrefabPath);
+	}
+
+	private void Start()
+	{
+		if (Instance != null) { Destroy(Instance); Instance = this; }
+		else Instance = this;
 	}
 
 	public override void Tick() 
@@ -31,13 +35,13 @@ public class ConstructionManager : BaseManager
 		GameObject prefab = Find(contructedObjName);
 		if (prefab == null) return;
 		
-		Instantiate(prefab);
-		prefab.transform.position = contructedObj.position;
-		prefab.transform.up = contructedObj.up;
-		prefab.GetComponent<NetworkObject>().Spawn();
+		var instantiatedObj = Instantiate(prefab);
+		instantiatedObj.transform.position = contructedObj.position;
+		instantiatedObj.transform.up = contructedObj.up;
+		instantiatedObj.GetComponent<NetworkObject>().Spawn();
 	}
 
-	[ServerRpc]
+	[ServerRpc(RequireOwnership = false)]
 	public void AddContructionServerRpc(Construction item)
 	{
 		contructedObjects.Add(item);
@@ -60,6 +64,13 @@ public struct Construction : INetworkSerializable, IEquatable<Construction>
 	public FixedString64Bytes name;
 	public Vector3 position;
 	public Vector3 up; // The transform.up of the object, which can be the raycast normal
+
+	public Construction(FixedString64Bytes name, Vector3 position, Vector3 up) : this()
+	{
+		this.name = name;
+		this.position = position;
+		this.up = up;
+	}
 
 	public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
 	{

@@ -13,6 +13,6 @@ public class Health : NetworkBehaviour, Inspectable
 
 	public InspectionData GetInspectableData()
 	{
-		return new("Health " + net_health.Value.ToString());
+		return new("Health " + net_health.Value.ToString(), new(2, 0.5f));
 	}
 }

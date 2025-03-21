@@ -3,13 +3,15 @@ using UnityEngine;
 public class GameData : MonoBehaviour
 {
 	[Header("Player Settings")]
-	[SerializeField] float _playerJumpHeight;
+	[SerializeField] float _playerZoomSpeedBonus;
 	[SerializeField] float _playerMoveSpeed;
+	[SerializeField] float _playerZoomSpeed;
 	[SerializeField] Transform _objectTransform;
 	[SerializeField] RectTransform _canvasTransform;
 	[SerializeField] RectTransform _worldCanvasTransform;
 
-	public float playerJumpHeight { get { return _playerJumpHeight; } }
+	public float playerZoomSpeed { get { return _playerZoomSpeed; } }
+	public float playerZoomSpeedBonus { get { return _playerZoomSpeedBonus; } }
 	public float playerMoveSpeed { get { return _playerMoveSpeed; } }
 	public RectTransform canvasTransform { get { return _canvasTransform; } }
 	public RectTransform worldCanvasTransform {  get { return _worldCanvasTransform; } }

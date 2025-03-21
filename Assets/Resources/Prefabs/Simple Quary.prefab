@@ -10,31 +10,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -870
+      value: 47.51111
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -385.75
+      value: 167.95734
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -760.9496
+      value: 34.365784
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9923546
+      value: 0.9361931
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0073651387
+      value: 0.20358326
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.059731342
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.1077514
+      value: 0.2865246
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_Name
-      value: Surface Quary
+      value: Simple Quary
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 84c85fa400564ff4e9e3568ac78ae878, type: 3}
       propertyPath: m_IsActive
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4086829443
+  GlobalObjectIdHash: 3383317594
   InScenePlacedSourceGlobalObjectIdHash: 3262284028
   DeferredDespawnTick: 0
   Ownership: 1
