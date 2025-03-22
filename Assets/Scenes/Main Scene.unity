@@ -278,6 +278,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8267462198956272248, guid: 456ca1a85b8572648b67303f23458936, type: 3}
+      propertyPath: _healthMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8827412894131785947, guid: 456ca1a85b8572648b67303f23458936, type: 3}
       propertyPath: m_Name
       value: Warrior
