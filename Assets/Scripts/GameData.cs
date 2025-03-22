@@ -7,6 +7,8 @@ public class GameData : MonoBehaviour
 	public float playerMoveSpeed;
 	public float playerZoomSpeed;
 	public Vector3 topdownRotation;
+	[Tooltip("When the player controls a leader, this offset will be applied to the position of the camera")]
+	public Vector3 leadFaceOffset;
 
 	[Header("attacker Settings")]
 	public float attackerSpeed;

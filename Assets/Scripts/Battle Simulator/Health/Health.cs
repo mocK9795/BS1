@@ -1,18 +1,55 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class Health : NetworkBehaviour, Inspectable
+public class Health : NetworkBehaviour
 {
-	public NetworkVariable<float> net_health;
+	NetworkObject _object;
+    public NetworkVariable< float > health = new(5);
+	public NetworkVariable< bool > active = new(true);
+    public enum HealthMode {Composite, Self}
+    [SerializeField] HealthMode _healthMode;
+    public HealthMode healthMode {get { return _healthMode;}}
+
+	[ServerRpc(RequireOwnership = false)]
+	public void DamageServerRpc(float value)
+	{
+		if (healthMode == HealthMode.Composite) return;
+		health.Value -= value;
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	public void UpdateHealthServerRpc()
+	{
+		if (healthMode == HealthMode.Self) return;
+
+		float totalHealth = 0;
+		Health[] healthComposition = GetComponentsInChildren<Health>();
+		foreach (Health health in healthComposition)
+		{
+			if (health.healthMode == HealthMode.Composite) continue;
+			totalHealth += health.health.Value;
+		}
+		health.Value = totalHealth;
+	}
 
 	public override void OnNetworkSpawn()
 	{
 		base.OnNetworkSpawn();
-		net_health = new(10, NetworkVariableReadPermission.Owner, NetworkVariableWritePermission.Server);
+		_object = GetComponent<NetworkObject>();
+
+		UpdateHealthServerRpc();
 	}
 
-	public InspectionData GetInspectableData()
+	private void Update()
 	{
-		return new("Health " + net_health.Value.ToString(), new(2, 0.5f));
+		gameObject.SetActive(active.Value);
+		if (!IsServer) return;
+		if (health.Value <= 0f)
+		{
+			if (_object)
+			_object.Despawn();
+
+			else active.Value = false;
+		}
 	}
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8579798622820622502}
   - component: {fileID: 7953590801233623639}
   - component: {fileID: 4650610650531111442}
+  - component: {fileID: 447606577537933896}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -49,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2065938156
+  GlobalObjectIdHash: 2572912654
   InScenePlacedSourceGlobalObjectIdHash: 2065938156
   DeferredDespawnTick: 0
   Ownership: 1
@@ -235,3 +236,11 @@ MonoBehaviour:
   mode: 0
   movementMode: 1
   interactionMode: 0
+--- !u!81 &447606577537933896
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4308176721960384923}
+  m_Enabled: 1

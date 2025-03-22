@@ -20,10 +20,10 @@ public class ProductionManager : BaseManager
     void ExtractProducts(Extractor extractor)
     {
         extractor.Produce();
-		Nationality nationality = extractor.GetComponent<Nationality>();
+		PEBObject nationality = extractor.GetComponent<PEBObject>();
         if (nationality == null) return;
 
-        var nearestStoragePoint = PoliticalSearch.Find<Storage>(nationality.net_nation.Value, extractor.transform.position);
+        var nearestStoragePoint = PoliticalSearch.Find<Storage>(nationality.nation.Value, extractor.transform.position);
         if (nearestStoragePoint == null) return;
 
         nearestStoragePoint.stockPile.Add(extractor.stockPile);

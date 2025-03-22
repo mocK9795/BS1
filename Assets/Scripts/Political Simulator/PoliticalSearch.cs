@@ -19,9 +19,9 @@ public class PoliticalSearch : MonoBehaviour
 
 		foreach (T script in allScripts)
 		{
-			Nationality scriptNationality = script.GetComponent<Nationality>();
+			PEBObject scriptNationality = script.GetComponent<PEBObject>();
 			if (scriptNationality == null) continue;
-			if (scriptNationality.net_nation.Value == nationality) continue;
+			if (scriptNationality.nation.Value == nationality) continue;
 
 			float distance = Vector3.Distance(script.transform.position, location);
 			if (distance > closestDistance) continue; 

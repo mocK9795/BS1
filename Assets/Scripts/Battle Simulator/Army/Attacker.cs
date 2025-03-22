@@ -5,6 +5,7 @@ using UnityEngine;
 public class Attacker : NetworkBehaviour
 {
 	CharacterController _controller;
+	public Weapon weapon { get; protected set; }
 	NetworkVariable<Vector2> _movement = new();
 
 	[ServerRpc(RequireOwnership = false)]
@@ -12,7 +13,7 @@ public class Attacker : NetworkBehaviour
 	{
 		_movement.Value = value;
 	}
-
+	
 	[ServerRpc(RequireOwnership = false)]
 	public void RotateServerRpc(float value)
 	{
@@ -21,7 +22,8 @@ public class Attacker : NetworkBehaviour
 
 	private void Start()
 	{
-		_controller = GetComponent<CharacterController>();
+		_controller = GetComponentInChildren<CharacterController>();
+		weapon = GetComponentInChildren<Weapon>();
 	}
 
 	private void Update()

@@ -18,6 +18,6 @@ public class EconomyObject : NetworkBehaviour, Inspectable
 		string message = "Stockpile has " 
 						+ stockPile.pile.Count.ToString() 
 						+ " items left";
-		return new(message, new(1, 1.5f));
+		return new(message, new(1.4f, 1.2f));
 	}
 }

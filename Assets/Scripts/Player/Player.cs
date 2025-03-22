@@ -1,8 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
 using GameFunctions;
-using UnityEngine.Rendering;
-
 public class Player : NetworkBehaviour
 {
 	[SerializeField] float _maxInteractionDistance;
@@ -20,6 +18,7 @@ public class Player : NetworkBehaviour
 
 	Camera _camera;
 	CharacterController _controller;
+	AudioListener _audioListener;
 
 	RaycastHit _raycast;
 
@@ -37,6 +36,7 @@ public class Player : NetworkBehaviour
 
 		_camera = GetComponent<Camera>();
 		_controller = GetComponent<CharacterController>();
+		_audioListener = GetComponent<AudioListener>();
 
 		if (IsOwner)
 		{
@@ -50,6 +50,7 @@ public class Player : NetworkBehaviour
 		else
 		{
 			_camera.enabled = false;
+			_audioListener.enabled = false;
 		}
 	}
 
@@ -72,7 +73,7 @@ public class Player : NetworkBehaviour
 		if (!leader) return;
 		leader.MoveServerRpc(_movement);
 		leader.RotateServerRpc(transform.eulerAngles.y);
-		transform.position = leader.transform.position;
+		transform.position = leader.transform.position + GameData.Instance.leadFaceOffset;
 		FreeRotation();
 	}
 
@@ -117,7 +118,7 @@ public class Player : NetworkBehaviour
 			_controller.Move(
 				Vector3.up * _look.x
 				* GameData.Instance.playerZoomSpeed
-				);
+		);
 	}
 
 	/// <summary>
@@ -179,7 +180,8 @@ public class Player : NetworkBehaviour
 
 	void OnPlayerLead()
 	{
-		if (!leader) AssignLeader();
+		if (!leader) { AssignLeader(); return; }
+		leader.weapon.Damage(_raycast);
 	}
 
 	void AssignLeader()
