@@ -23,8 +23,10 @@ public class Attacker : NetworkBehaviour
 	private void Start()
 	{
 		_controller = GetComponentInChildren<CharacterController>();
-		weapon = GetComponentInChildren<Weapon>();
+		SetWeapon();
 	}
+
+	void SetWeapon() { weapon = GetComponentInChildren<Weapon>(); }
 
 	private void Update()
 	{

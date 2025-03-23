@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inspector : MonoBehaviour
 {
     public static Inspector Instance = null;
     [SerializeField] GameObject _popupPrefab;
+    [SerializeField] GameObject _textPrefab;
+    [SerializeField] GameObject _imagePrefab;
     [SerializeField] RectTransform _popupGroup;
     public enum InspectionLayout {LayoutGroup, AroundMouse}
     public InspectionLayout layout;
@@ -40,26 +44,88 @@ public class Inspector : MonoBehaviour
         foreach (var inspectable in allInspectableObject)
         {
             InspectionData data = inspectable.GetInspectableData();
-            string message = data.data;
 
             GameObject inspectionUI = Instantiate(_popupPrefab,
                 (_utilizeWorldCanvas) 
                 ? GameData.Instance.worldCanvasTransform : GameData.Instance.canvasTransform);
 
-            inspectionUI.GetComponentInChildren<TMP_Text>().text = message;
+
             RectTransform inspectionUITransform = inspectionUI.GetComponent<RectTransform>();
 			_activeInspectionUI.Add(inspectionUITransform);
 
-            if (layout == InspectionLayout.LayoutGroup)
-            inspectionUI.transform.SetParent(_popupGroup, false);
+            ApplyLayout(inspectionUITransform, data);
 
-			SetUISize(inspectionUITransform, data.aspectRatio);
+			if (layout == InspectionLayout.LayoutGroup)
+            inspectionUI.transform.SetParent(_popupGroup, false);
 		}
 
 		if (layout == InspectionLayout.AroundMouse) PositionUIAroundMouse();
         if (_utilizeWorldCanvas) SetWorldCanvasData(inspectedObject);
 	}
 
+
+    void ApplyLayout(RectTransform UIParent, InspectionData data)
+    {
+		UIParent.sizeDelta = _popupSize * data.aspectRatio;
+	
+        if (data.layout == InspectionData.Layout.Basic) SetBasicLayout(UIParent, data);
+        if (data.layout == InspectionData.Layout.Grid) SetGridLayout(UIParent, data);
+        if (data.layout == InspectionData.Layout.Horizontal) SetHorizontalLayout(UIParent, data);
+        if (data.layout == InspectionData.Layout.Vertical) SetVerticalLayout(UIParent, data);
+    }
+
+    void SetBasicLayout(RectTransform UIParent, InspectionData data)
+    {
+        AddTextObject(UIParent, data.basicTextData);
+    }
+
+    void AddTextObject(RectTransform UIParent, string data)
+    {
+		var textObject = Instantiate(_textPrefab, UIParent);
+		textObject.GetComponent<TMP_Text>().text = data;
+	}
+
+    void AddImageObject(RectTransform UIParent, Sprite data)
+    {
+        var imageObject = Instantiate(_imagePrefab, UIParent);
+        imageObject.GetComponent<Image>().sprite = data;
+    } 
+
+    void SetGridLayout(RectTransform UIParent, InspectionData data)
+    {
+        GridLayoutGroup layout = UIParent.AddComponent<GridLayoutGroup>();
+        layout.cellSize = data.gridCellSize;
+
+        SetElements(UIParent, data);
+    }
+
+    void SetVerticalLayout(RectTransform UIParent, InspectionData data)
+    {
+        VerticalLayoutGroup layout = UIParent.AddComponent<VerticalLayoutGroup>();
+        SetElements(UIParent, data);
+    }
+
+    void SetHorizontalLayout(RectTransform UIParent, InspectionData data)
+    {
+        HorizontalLayoutGroup layout = UIParent.AddComponent<HorizontalLayoutGroup>();
+        SetElements(UIParent, data);
+    }
+
+    void SetElements(RectTransform UIParent, InspectionData data)
+    {
+		foreach (var element in data.elements)
+		{
+			if (element.type == InspectionElement.Type.String)
+			{
+				AddTextObject(UIParent, element.text);
+			}
+
+			else if (element.type == InspectionElement.Type.Image)
+			{
+				AddImageObject(UIParent, element.sprite);
+			}
+		}
+	}
 
 	void PositionUIAroundMouse()
     {

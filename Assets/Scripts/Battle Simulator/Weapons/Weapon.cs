@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour, Inspectable
 {
     [SerializeField] float _damage;
     [SerializeField] float _range;
@@ -13,7 +13,10 @@ public class Weapon : MonoBehaviour
 
     public void Damage(RaycastHit raycast)
     {
-        if (_timeSinceLastDamage < _speed) return;
+		_animator.SetTrigger("Fire");
+		_audioSource.PlayOneShot(_attackSound);
+
+		if (_timeSinceLastDamage < _speed) return;
         if (!raycast.collider) return;
         if (Vector3.Distance(transform.position, raycast.point) > _range) return;
         Health obj = raycast.collider.GetComponent<Health>();
@@ -35,10 +38,17 @@ public class Weapon : MonoBehaviour
             health.DamageServerRpc(_damage / count);
         }
         if (obj.healthMode == Health.HealthMode.Composite) obj.UpdateHealthServerRpc();
-
-        _animator.SetTrigger("Fire");
-        _audioSource.PlayOneShot(_attackSound);
     }
+
+	public InspectionData GetInspectableData()
+	{
+        return new(
+            "Damage " + _damage.ToString() + "\n" +
+            "Range " + _range.ToString() + "\n" +
+            "Speed " + _speed.ToString(),
+            new(1.5f, 1.2f)
+            );
+	}
 
 	private void Start()
 	{

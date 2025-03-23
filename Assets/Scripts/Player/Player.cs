@@ -13,6 +13,9 @@ public class Player : NetworkBehaviour
 	public enum PlayerInteraction { InspectMode, BuildMode, Lead}
 	public PlayerInteraction interactionMode;
 
+	public enum RaycastMode {Mouse, Centre}
+	public RaycastMode raycastMode;
+
 	Vector2 _movement;
 	Vector2 _look;
 
@@ -190,8 +193,11 @@ public class Player : NetworkBehaviour
 		Leader leaderComponent = _raycast.collider.GetComponent<Leader>();
 		if (!leaderComponent && _raycast.collider.transform.parent)
 			leaderComponent = _raycast.collider.transform.parent.GetComponent<Leader>();
+		
 		leader = leaderComponent;
 		movementMode = MovementMode.Lead;
+		raycastMode = RaycastMode.Centre;
+		GameData.Instance.crossHair.SetActive(true);
 	}
 
 	void OnInteractionModeChange(PlayerInteraction mode)
@@ -200,11 +206,19 @@ public class Player : NetworkBehaviour
 		interactionMode = mode;
 		movementMode = MovementMode.Topdown;
 		transform.eulerAngles = GameData.Instance.topdownRotation;
+
+		raycastMode = RaycastMode.Mouse;
+		GameData.Instance.crossHair.SetActive(false);
 	}
 
 	RaycastHit CastRay()
 	{
-		Ray ray = _camera.ScreenPointToRay(PlayerInputManager.Instance.mousePosition);
+		Ray ray;
+		if (raycastMode == RaycastMode.Mouse) 
+			ray = _camera.ScreenPointToRay(PlayerInputManager.Instance.mousePosition);
+		else if (raycastMode == RaycastMode.Centre)
+			ray = new Ray(transform.position, transform.forward);
+		else return new RaycastHit();
 		Physics.Raycast(ray, out RaycastHit hit, _maxInteractionDistance);
 		return hit;
 	}

@@ -19,6 +19,9 @@ public class GameData : MonoBehaviour
 	public RectTransform canvasTransform;
 	public RectTransform worldCanvasTransform;
 
+	[Header("UI Refrence")]
+	public GameObject crossHair;
+
 	public static GameData Instance;
 
 	private void Start()
