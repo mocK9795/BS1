@@ -23,7 +23,7 @@ public class ProductionManager : BaseManager
 		PEBObject nationality = extractor.GetComponent<PEBObject>();
         if (nationality == null) return;
 
-        var nearestStoragePoint = PoliticalSearch.Find<Storage>(nationality.nation.Value, extractor.transform.position);
+        var nearestStoragePoint = PoliticalSearch.FindNearest<Storage>(nationality.nation.Value, extractor.transform.position);
         if (nearestStoragePoint == null) return;
 
         nearestStoragePoint.stockPile.Add(extractor.stockPile);

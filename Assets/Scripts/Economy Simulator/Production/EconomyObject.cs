@@ -21,3 +21,9 @@ public class EconomyObject : NetworkBehaviour, Inspectable
 		return new(message, new(1.4f, 1.2f));
 	}
 }
+
+public interface IProducer
+{
+	public void Source(); // Source Goods From Storage
+	public void Produce();
+}

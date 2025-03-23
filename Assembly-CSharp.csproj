@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Economy Simulator\Good.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabManager.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspectable.cs" />
+    <Compile Include="Assets\Scripts\Economy Simulator\Production\Converter.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Weapons\Weapon.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />

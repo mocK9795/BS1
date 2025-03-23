@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 
@@ -11,18 +12,14 @@ public class PoliticalSearch : MonoBehaviour
 	/// <param name="nationality"></param>
 	/// <param name="location"></param>
 	/// <returns></returns>
-	public static T Find<T>(FixedString32Bytes nationality, Vector3 location) where T : MonoBehaviour
+	public static T FindNearest<T>(FixedString32Bytes nationality, Vector3 location) where T : MonoBehaviour
     {
-		T[] allScripts = FindObjectsByType<T>(FindObjectsSortMode.None);
+		T[] allScripts = Find<T>(nationality);
 		T closest = null;
 		float closestDistance = float.MaxValue;
 
 		foreach (T script in allScripts)
 		{
-			PEBObject scriptNationality = script.GetComponent<PEBObject>();
-			if (scriptNationality == null) continue;
-			if (scriptNationality.nation.Value == nationality) continue;
-
 			float distance = Vector3.Distance(script.transform.position, location);
 			if (distance > closestDistance) continue; 
 			closestDistance = distance;
@@ -31,4 +28,22 @@ public class PoliticalSearch : MonoBehaviour
 
 		return closest;
 	}
+
+	public static T[] Find<T>(FixedString32Bytes nationality) where T : MonoBehaviour
+	{
+		T[] allScripts = FindObjectsByType<T>(FindObjectsSortMode.None);
+		List<T> result = new();
+
+		foreach (T script in allScripts)
+		{
+			PEBObject scriptNationality = script.GetComponent<PEBObject>();
+			if (scriptNationality == null) continue;
+			if (scriptNationality.nation.Value.ToString() != nationality.ToString()) continue;
+
+			result.Add(script);
+		}
+		
+		return result.ToArray();
+	}
+
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Extractor : EconomyObject
+public class Extractor : EconomyObject, IProducer
 {
 	[SerializeField] StockPile extractionProducts;
 
@@ -13,5 +13,10 @@ public class Extractor : EconomyObject
 	public void Produce()
 	{
 		stockPile.Add(extractionProducts);
+	}
+
+	public void Source()
+	{
+
 	}
 }
