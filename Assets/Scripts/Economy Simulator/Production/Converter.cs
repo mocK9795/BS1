@@ -7,5 +7,8 @@ public class Converter : EconomyObject, IProducer
     public List<Good> output;
 
     public void Produce() { }
-    public void Source() { }
+    public void Source() 
+    {
+    
+    }
 }
