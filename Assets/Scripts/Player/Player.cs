@@ -1,6 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
 using GameFunctions;
+using UnityEngine.Rendering.Universal;
+
 public class Player : NetworkBehaviour
 {
 	[SerializeField] float _maxInteractionDistance;
@@ -10,7 +12,7 @@ public class Player : NetworkBehaviour
 	enum MovementMode { Free, Topdown, Lead}
 	[SerializeField] MovementMode movementMode;
 
-	public enum PlayerInteraction { InspectMode, BuildMode, Lead}
+	public enum PlayerInteraction { InspectMode, BuildMode, Lead, Political}
 	public PlayerInteraction interactionMode;
 
 	public enum RaycastMode {Mouse, Centre}
@@ -187,6 +189,12 @@ public class Player : NetworkBehaviour
 		leader.weapon.Damage(_raycast);
 	}
 
+	void OnPoliticalModeActivate()
+	{
+		_camera.orthographic = true;
+		_camera.orthographicSize = GameData.Instance.orthographicSize;
+		transform.position = new(transform.position.x, GameData.Instance.orthographicYPosition, transform.position.z);
+	}
 	void AssignLeader()
 	{
 		if (!_raycast.collider) return;
@@ -203,12 +211,23 @@ public class Player : NetworkBehaviour
 	void OnInteractionModeChange(PlayerInteraction mode)
 	{
 		if (!IsOwner) return;
-		interactionMode = mode;
-		movementMode = MovementMode.Topdown;
-		transform.eulerAngles = GameData.Instance.topdownRotation;
 
-		raycastMode = RaycastMode.Mouse;
+		if (interactionMode == PlayerInteraction.Political) ResetY();
+		interactionMode = mode;
+		
+		transform.eulerAngles = GameData.Instance.topdownRotation;
 		GameData.Instance.crossHair.SetActive(false);
+		movementMode = MovementMode.Topdown;
+		raycastMode = RaycastMode.Mouse;
+		_camera.orthographic = false;
+
+		if (interactionMode == PlayerInteraction.Political) OnPoliticalModeActivate();
+	}
+
+	void ResetY() 
+	{ 
+		transform.position = 
+			new(transform.position.x, GameData.Instance.defaultPlayerY, transform.position.z);
 	}
 
 	RaycastHit CastRay()

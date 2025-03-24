@@ -9,6 +9,11 @@ public class GameData : MonoBehaviour
 	public Vector3 topdownRotation;
 	[Tooltip("When the player controls a leader, this offset will be applied to the position of the camera")]
 	public Vector3 leadFaceOffset;
+	public float defaultPlayerY;
+
+	[Header("Player Orthographic Mode")]
+	public float orthographicSize;
+	public float orthographicYPosition;
 
 	[Header("attacker Settings")]
 	public float attackerSpeed;
