@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour, Inspectable
@@ -9,6 +10,8 @@ public class Weapon : MonoBehaviour, Inspectable
     public float speed;
 
     [SerializeField] AudioClip _attackSound;
+    [SerializeField] GameObject _particles;
+
     Animator _animator;
     AudioSource _audioSource;
     float _timeSinceLastDamage;
@@ -16,10 +19,12 @@ public class Weapon : MonoBehaviour, Inspectable
 
     public void Damage(RaycastHit raycast)
     {
+        if (!raycast.collider) return;
+
 		Health aim = raycast.collider.GetComponent<Health>();
-		if (aim == null)
-			aim = raycast.collider.transform.parent.GetComponent<Health>();
-        if (aim == null) {ProduceDamageVisuals(); return;}
+		if (aim == null && raycast.collider.transform.parent)
+            aim = raycast.collider.transform.parent.GetComponent<Health>();
+        if (aim == null) {ProduceDamageVisualsClientRpc(raycast.point); return;}
 
         Damage(aim, raycast.point);
 	}
@@ -52,13 +57,17 @@ public class Weapon : MonoBehaviour, Inspectable
         if (aim.healthMode == Health.HealthMode.Composite) aim.UpdateHealthServerRpc();
 
         _timeSinceLastDamage = 0;
-		ProduceDamageVisuals();
+		ProduceDamageVisualsClientRpc(point);
 	}
 
-	void ProduceDamageVisuals()
+    [ClientRpc]
+	void ProduceDamageVisualsClientRpc(Nullable<Vector3> point)
 	{
 		_animator.SetTrigger("Fire");
 		_audioSource.PlayOneShot(_attackSound);
+        
+        if (point == null || !_particles) return;
+		Instantiate(_particles, (Vector3) point, Quaternion.identity);
 	}
 
 	public InspectionData GetInspectableData()

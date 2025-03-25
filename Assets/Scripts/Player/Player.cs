@@ -192,7 +192,10 @@ public class Player : NetworkBehaviour
 	}
 	void OnPlayerBuild()
 	{
-		if (_raycast.collider == null && !PlayerInputManager.Instance.isDraging) return;
+		if (!_raycast.collider
+			|| !PlayerInputManager.Instance.isDraging
+			|| _raycast.collider.gameObject.layer != 6
+		) return;
 
 		Construction construction = new Construction(
 			ConstructionOptionsManager.Instance.selectedPrefab,
@@ -257,7 +260,7 @@ public class Player : NetworkBehaviour
 		if (interactionMode is PlayerInteraction.Battle or PlayerInteraction.Lead) ResetTransform();
 		interactionMode = mode;
 
-		if (activeInfantry) activeInfantry.OnExitControllServerRpc();
+		if (activeInfantry) { activeInfantry.OnExitControllServerRpc(); activeInfantry = null; }
 		GameData.Instance.crossHair.SetActive(false);
 		movementMode = MovementMode.Topdown;
 		raycastMode = RaycastMode.Mouse;

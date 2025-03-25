@@ -286,6 +286,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6494484580028705380, guid: 456ca1a85b8572648b67303f23458936, type: 3}
+      propertyPath: _particles
+      value: 
+      objectReference: {fileID: 6445081312834725360, guid: e9d738da28ee24343a6c165a840f3d35, type: 3}
     - target: {fileID: 8827412894131785947, guid: 456ca1a85b8572648b67303f23458936, type: 3}
       propertyPath: m_Name
       value: Warrior
@@ -1035,6 +1039,7 @@ GameObject:
   - component: {fileID: 410087040}
   - component: {fileID: 410087042}
   - component: {fileID: 410087043}
+  - component: {fileID: 410087052}
   - component: {fileID: 410087048}
   - component: {fileID: 410087050}
   - component: {fileID: 410087047}
@@ -1166,7 +1171,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: ab09877e2e707104187f6f83e2f62510, type: 2}
 --- !u!114 &410087047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1423,6 +1428,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragThresshold: 0.25
   localPlayerCamera: {fileID: 0}
+--- !u!114 &410087052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410087039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 418f5fa9d6a455f4cadf96a7acac3c52, type: 2}
 --- !u!114 &432816568
 MonoBehaviour:
   m_ObjectHideFlags: 0

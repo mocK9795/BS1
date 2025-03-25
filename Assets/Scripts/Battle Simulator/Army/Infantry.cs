@@ -42,12 +42,14 @@ public class Infantry : NetworkBehaviour
 	[ServerRpc(RequireOwnership = false)]
 	public void OnControllServerRpc()
 	{
+		InfantryTick.Instance.Logic -= LocalLogic;
 		_controller.enabled = true;
 		_agent.enabled = false;
 	}
 	[ServerRpc(RequireOwnership = false)]
 	public void OnExitControllServerRpc()
 	{
+		InfantryTick.Instance.Logic += LocalLogic;
 		_controller.enabled = false;
 		_agent.enabled = true;
 	}
@@ -103,5 +105,11 @@ public class Infantry : NetworkBehaviour
 
 		if (validObject.Count == 0) return;
 		weapon.Damage(validObject[0]);
+	}
+
+	public override void OnNetworkDespawn()
+	{
+		if (IsServer) InfantryTick.Instance.Logic -= LocalLogic;
+		base.OnNetworkDespawn();
 	}
 } 
