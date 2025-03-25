@@ -88,13 +88,15 @@ public class Infantry : NetworkBehaviour
 
 		Collider[] nearbyObjects = Physics.OverlapSphere(transform.position, weapon.range);
 		List<PEBObject> validObject = new();
+
 		foreach (Collider obj in nearbyObjects)
 		{
 			PEBObject nationality = obj.GetComponent<PEBObject>();
-			if (!nationality) nationality = obj.transform.parent.GetComponent<PEBObject>();
-		
+			if (!nationality && obj.transform.parent)
+				nationality = obj.transform.parent.GetComponent<PEBObject>();
+
 			if (!nationality) continue;
-			if (nationality.nation.Value == _data.nation.Value) continue;
+			if (nationality.nation.Value.ToString() == _data.nation.Value.ToString()) continue;
 
 			validObject.Add(nationality);
 		}

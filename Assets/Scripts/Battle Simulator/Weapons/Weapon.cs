@@ -19,15 +19,13 @@ public class Weapon : MonoBehaviour, Inspectable
 		Health aim = raycast.collider.GetComponent<Health>();
 		if (aim == null)
 			aim = raycast.collider.transform.parent.GetComponent<Health>();
-        if (aim == null) {ProduceDamageVisuals(); return; }
+        if (aim == null) {ProduceDamageVisuals(); return;}
 
         Damage(aim, raycast.point);
 	}
 
     public void Damage(Health aim, Nullable<Vector3> _point = null)
     {
-        ProduceDamageVisuals();
-
 		if (_timeSinceLastDamage < speed) return;
         if (!aim) return;
         
@@ -52,9 +50,12 @@ public class Weapon : MonoBehaviour, Inspectable
             health.DamageServerRpc(damage / count);
         }
         if (aim.healthMode == Health.HealthMode.Composite) aim.UpdateHealthServerRpc();
-    }
 
-    void ProduceDamageVisuals()
+        _timeSinceLastDamage = 0;
+		ProduceDamageVisuals();
+	}
+
+	void ProduceDamageVisuals()
 	{
 		_animator.SetTrigger("Fire");
 		_audioSource.PlayOneShot(_attackSound);
@@ -81,5 +82,4 @@ public class Weapon : MonoBehaviour, Inspectable
 	{
         if (_timeSinceLastDamage < speed) _timeSinceLastDamage += Time.deltaTime;
 	}
-
 }

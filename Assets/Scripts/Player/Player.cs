@@ -242,7 +242,8 @@ public class Player : NetworkBehaviour
 		Infantry infantryComponent = _raycast.collider.GetComponent<Infantry>();
 		if (!infantryComponent && _raycast.collider.transform.parent)
 			infantryComponent = _raycast.collider.transform.parent.GetComponent<Infantry>();
-		
+		if (!infantryComponent) return;
+
 		raycastMode = RaycastMode.Centre;
 		movementMode = MovementMode.Lead;
 		activeInfantry = infantryComponent;

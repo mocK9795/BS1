@@ -238,6 +238,14 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 949716904
       objectReference: {fileID: 0}
+    - target: {fileID: 2405985891159105364, guid: 456ca1a85b8572648b67303f23458936, type: 3}
+      propertyPath: m_BaseOffset
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2405985891159105364, guid: 456ca1a85b8572648b67303f23458936, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5820473090248234542, guid: 456ca1a85b8572648b67303f23458936, type: 3}
       propertyPath: m_LocalPosition.x
       value: 29.567402
@@ -277,22 +285,6 @@ PrefabInstance:
     - target: {fileID: 5820473090248234542, guid: 456ca1a85b8572648b67303f23458936, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6494484580028705380, guid: 456ca1a85b8572648b67303f23458936, type: 3}
-      propertyPath: range
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 6494484580028705380, guid: 456ca1a85b8572648b67303f23458936, type: 3}
-      propertyPath: speed
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6494484580028705380, guid: 456ca1a85b8572648b67303f23458936, type: 3}
-      propertyPath: damage
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8267462198956272248, guid: 456ca1a85b8572648b67303f23458936, type: 3}
-      propertyPath: _nation
-      value: Broit
       objectReference: {fileID: 0}
     - target: {fileID: 8827412894131785947, guid: 456ca1a85b8572648b67303f23458936, type: 3}
       propertyPath: m_Name
@@ -1842,7 +1834,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pol
+  m_text: Btl
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 80526cb72c493ff4fb4353c4bc31d11e, type: 2}
   m_sharedMaterial: {fileID: 1942762066539369203, guid: 80526cb72c493ff4fb4353c4bc31d11e, type: 2}
@@ -2276,7 +2268,7 @@ GameObject:
   - component: {fileID: 902282899}
   - component: {fileID: 902282898}
   m_Layer: 5
-  m_Name: Tab Political Mode
+  m_Name: Tab Battle Mode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
