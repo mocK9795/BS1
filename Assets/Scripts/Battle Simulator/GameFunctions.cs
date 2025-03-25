@@ -19,5 +19,12 @@ namespace GameFunctions
 		{
 			return (Within(value, min, max) && Within(value.z, min.z, max.z));
 		}
+
+		public static bool AreAnglesEqual(float angle1, float angle2, float tolerance)
+		{
+			// Mathf.DeltaAngle returns the shortest difference in degrees between two angles.
+			float difference = Mathf.DeltaAngle(angle1, angle2);
+			return Mathf.Abs(difference) <= tolerance;
+		}
 	}
 }

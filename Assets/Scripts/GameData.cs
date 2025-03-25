@@ -16,6 +16,7 @@ public class GameData : MonoBehaviour
 	public float orthographicYPosition;
 
 	[Header("Infantry Settings")]
+	public float infantryRotationSpeed;
 	public float infantrySpeed;
 	public float gravity;
 

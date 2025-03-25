@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Infantry : NetworkBehaviour
 {
@@ -17,14 +18,16 @@ public class Infantry : NetworkBehaviour
 
 
 
-	private void Start()
+	public override void OnNetworkSpawn()
 	{
+		base.OnNetworkSpawn();
+
 		_controller = GetComponentInChildren<CharacterController>();
 		_agent = GetComponentInChildren<NavMeshAgent>();
 		_data = GetComponentInChildren<PEBObject>();
 		_agent.speed = GameData.Instance.infantrySpeed;
 		_controller.enabled = false;
-
+		
 		InfantryTick.Instance.Logic += LocalLogic;
 		SetWeapon();
 	}
@@ -104,7 +107,31 @@ public class Infantry : NetworkBehaviour
 		}
 
 		if (validObject.Count == 0) return;
-		weapon.Damage(validObject[0]);
+
+		int aim = Random.Range(0, validObject.Count - 1);
+		LookAtTarget(validObject[aim].transform.position);
+		weapon.Damage(validObject[aim]);
+	}
+
+	IEnumerator LookAtTarget(Vector3 point)
+	{
+		Vector3 initialRotation = transform.eulerAngles;
+		transform.LookAt(point);
+		Vector3 finalRotation = new(initialRotation.x, transform.eulerAngles.y, initialRotation.z);
+		transform.eulerAngles = initialRotation;
+
+		float yAngle = initialRotation.y;
+		float currentVelocity = 0;
+
+		while (Basic.AreAnglesEqual(yAngle, finalRotation.y, 5))
+		{
+			yAngle = Mathf.SmoothDampAngle(
+				yAngle, 
+				finalRotation.y, 
+				ref currentVelocity, 
+				Time.deltaTime * GameData.Instance.infantryRotationSpeed);
+			yield return null;
+		}
 	}
 
 	public override void OnNetworkDespawn()
