@@ -62,6 +62,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.29f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Battle Simulator\Army\Infantry.cs" />
     <Compile Include="Assets\Scripts\UI\Colors\ColorPalatte.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\GameManager.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBox.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Assets\Scripts\UI\Object Inspection\Popup.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeHelper.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
-    <Compile Include="Assets\Scripts\Battle Simulator\Army\Attacker.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabButton.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Converter.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Weapons\Weapon.cs" />
+    <Compile Include="Assets\Scripts\Battle Simulator\Army\InfantryTick.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />
     <Compile Include="Assets\Scripts\UI\Contruction UI\ConstructionOption.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspector.cs" />

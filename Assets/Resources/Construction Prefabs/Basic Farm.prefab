@@ -296,6 +296,7 @@ GameObject:
   - component: {fileID: 3504661278445857833}
   - component: {fileID: 7244021849667498740}
   - component: {fileID: 6302828602574532856}
+  - component: {fileID: 601463341527552569}
   m_Layer: 0
   m_Name: Basic Farm
   m_TagString: Untagged
@@ -336,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4010125181
+  GlobalObjectIdHash: 2284556992
   InScenePlacedSourceGlobalObjectIdHash: 4010125181
   DeferredDespawnTick: 0
   Ownership: 1
@@ -383,6 +384,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   health:
     m_InternalValue: 20
+  active:
+    m_InternalValue: 1
   _healthMode: 1
   _nation: Fanz
   nation:
@@ -420,6 +423,22 @@ MonoBehaviour:
         byte0027: 0
         byte0028: 0
         byte0029: 0
+--- !u!208 &601463341527552569
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7241339397476154492}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 4.48, y: 0.945, z: 4.45}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.6, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &8278119068114075020
 GameObject:
   m_ObjectHideFlags: 0

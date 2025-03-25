@@ -15,8 +15,8 @@ public class GameData : MonoBehaviour
 	public float orthographicSize;
 	public float orthographicYPosition;
 
-	[Header("attacker Settings")]
-	public float attackerSpeed;
+	[Header("Infantry Settings")]
+	public float infantrySpeed;
 	public float gravity;
 
 	[Header("Global Transforms")]

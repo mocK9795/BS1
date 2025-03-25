@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class Follower : Attacker
+public class Follower : Infantry
 {
     Leader leader;
     bool isFollowing;
@@ -18,7 +18,7 @@ public class Follower : Attacker
         leader = null;
     }
 
-    public void OnCommand(Vector3 position, Attacker enemey)
+    public void OnCommand(Vector3 position, Infantry enemey)
     {
 
     }
