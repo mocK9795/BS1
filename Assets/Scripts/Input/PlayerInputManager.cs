@@ -9,7 +9,8 @@ public class PlayerInputManager : MonoBehaviour
     public static PlayerInputManager Instance = null;
 
 	public Action onPlayerJump;
-	public Action onPlayerClick;
+	public Action onPlayerClickEnd;
+	public Action onPlayerClickStart;
 	public Action<Vector2> onPlayerMove;
 	public Action<Vector2> onPlayerLook;
 	public Vector2 mousePosition { get; private set; }
@@ -56,12 +57,13 @@ public class PlayerInputManager : MonoBehaviour
 	public void OnClick(InputAction.CallbackContext value)
 	{
 		mouseDown = !value.canceled;
+		if (value.started) onPlayerClickStart?.Invoke();
 		if (!value.canceled) return;
 
 		isDraging = false;
 		currentDrag = 0;
 
-		onPlayerClick?.Invoke();
+		onPlayerClickEnd?.Invoke();
 	} 
 
 	public void GrantMousePosition(InputAction.CallbackContext value)

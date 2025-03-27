@@ -5,11 +5,10 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Collections;
 
-public class Infantry : NetworkBehaviour
+public class Infantry : Unit
 {
 	CharacterController _controller;
 	NavMeshAgent _agent;
-	PEBObject _data;
 
 	public Weapon weapon { get; protected set; }
 	
@@ -24,7 +23,6 @@ public class Infantry : NetworkBehaviour
 
 		_controller = GetComponentInChildren<CharacterController>();
 		_agent = GetComponentInChildren<NavMeshAgent>();
-		_data = GetComponentInChildren<PEBObject>();
 		_agent.speed = GameData.Instance.infantrySpeed;
 		_controller.enabled = false;
 		
@@ -56,11 +54,12 @@ public class Infantry : NetworkBehaviour
 		_controller.enabled = false;
 		_agent.enabled = true;
 	}
+
 	[ServerRpc(RequireOwnership = false)]
-	public void OnCommandServerRpc(Vector3 objective)
+	public override void OnCommandServerRpc(Vector3 objective)
 	{
 		if (!_agent.enabled) return; 
-		_objective = objective;
+		base.OnCommandServerRpc(objective);
 		_agent.SetDestination(_objective);
 	}
 

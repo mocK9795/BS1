@@ -44,6 +44,6 @@ public class CinematicCamera : Player
         rotations = new List<Vector3>();
 
         PlayerInputManager.Instance.onPlayerJump += OnPlayerJump;
-        PlayerInputManager.Instance.onPlayerClick += OnPlayAnimation;
+        PlayerInputManager.Instance.onPlayerClickEnd += OnPlayAnimation;
 	}
 }

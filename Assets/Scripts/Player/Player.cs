@@ -2,14 +2,14 @@ using Unity.Netcode;
 using UnityEngine;
 using GameFunctions;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class Player : NetworkBehaviour
 {
 	[SerializeField] float _maxInteractionDistance;
 
-	enum MovementMode { Free, Topdown, Lead, Orthographic}
+	enum MovementMode { Free, AirView, Lead, TopDown}
 	[SerializeField] MovementMode movementMode;
-	[SerializeField] bool _utilizeOrthographicCamera;
 
 	// Lead means that the player is controlling infantry
 	public enum PlayerInteraction { InspectMode, BuildMode, Lead, Battle}
@@ -35,7 +35,10 @@ public class Player : NetworkBehaviour
 	Infantry activeInfantry;
 
 	// Battle Mode
-	[SerializeField] List<Infantry> selectedInfantry = new();
+	[SerializeField] List<Unit> selectedInfantry = new();
+	Vector3 _selectionStart;
+	Vector3 _selectionEnd;
+	bool _isSelecting;
 
 	public override void OnNetworkSpawn()
 	{
@@ -50,7 +53,8 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerJump += OnPlayerJump;
 			PlayerInputManager.Instance.onPlayerMove += OnPlayerMove;
 			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
-			PlayerInputManager.Instance.onPlayerClick += OnPlayerInteraction;
+			PlayerInputManager.Instance.onPlayerClickStart += OnPlayerInteractionStart;
+			PlayerInputManager.Instance.onPlayerClickEnd += OnPlayerInteractionEnd;
 			PlayerInputManager.Instance.localPlayerCamera = _camera;
 			TabManager.Instance.onTabSelectionChange += OnInteractionModeChange;
 		}
@@ -65,9 +69,9 @@ public class Player : NetworkBehaviour
 		if (!IsOwner) return;
 
 		if (movementMode == MovementMode.Free) FreeMovement();
-		if (movementMode == MovementMode.Topdown) TopDownMovement();
+		if (movementMode == MovementMode.AirView) AirViewMovement();
 		if (movementMode == MovementMode.Lead) LeadMovement();
-		if (movementMode == MovementMode.Orthographic) OrthographicMovement();
+		if (movementMode == MovementMode.TopDown) TopdownMovement();
 
 		_raycast = Raycast();
 		OnHover();
@@ -77,11 +81,10 @@ public class Player : NetworkBehaviour
 	
 
 	// Movement Based Functions
-	void TopDownMovement()
+	void AirViewMovement()
 	{
 		_controller.Move(
-			Time.deltaTime * GameData.Instance.playerMoveSpeed *
-			GameData.Instance.playerZoomSpeedBonus * transform.position.y *
+			MovementSpeed() *
 			(_movement.y * Basic.XZPlane(transform.forward) +
 			_movement.x * Basic.XZPlane(transform.right))
 			);
@@ -96,18 +99,18 @@ public class Player : NetworkBehaviour
 		activeInfantry.RotateServerRpc(transform.eulerAngles.y);
 		transform.position = activeInfantry.transform.position + GameData.Instance.leadFaceOffset;
 	}
-	void OrthographicMovement()
+	void TopdownMovement()
 	{
 		_controller.Move(
-			Time.deltaTime * GameData.Instance.playerMoveSpeed *
-			GameData.Instance.playerZoomSpeedBonus * _camera.orthographicSize *
+			MovementSpeed() *
 			(_movement.y * Vector3.forward + _movement.x * Vector3.right)
 		);
 
-		if (PlayerInputManager.Instance.mouseDown) {
-			if (_camera.orthographic) ZoomOrthographicSize();
-			else ZoomY();
-		}
+		if (PlayerInputManager.Instance.mouseDown) ZoomY();
+	}
+	float MovementSpeed() {
+		return Time.deltaTime * GameData.Instance.playerMoveSpeed *
+			GameData.Instance.playerZoomSpeedBonus * transform.position.y;
 	}
 	void ZoomY() { _controller.Move(Vector3.up * _look.x * GameData.Instance.playerZoomSpeed); }
 	void ZoomOrthographicSize()
@@ -131,13 +134,17 @@ public class Player : NetworkBehaviour
 
 
 	// Pointer Based Functions
-	void OnPlayerInteraction()
+	void OnPlayerInteractionStart() 
+	{ 
+		if (interactionMode == PlayerInteraction.Battle) OnBattleInteractionStart();
+	}
+	void OnPlayerInteractionEnd()
 	{
 		if (!IsOwner) return;
 
 		if (interactionMode == PlayerInteraction.BuildMode) OnPlayerBuild();
 		if (interactionMode == PlayerInteraction.Lead) OnPlayerLead();
-		if (interactionMode == PlayerInteraction.Battle) OnBattleInteraction();
+		if (interactionMode == PlayerInteraction.Battle) OnBattleInteractionComplete();
 	}
 	void OnHover()
 	{
@@ -177,7 +184,7 @@ public class Player : NetworkBehaviour
 	}
 
 
-	// Interaction Mode Based Functions
+	// Interaction Mode Based Functions (On Click Cancel)
 	void OnPlayerInspect() 
 	{
 		if (_raycast.collider == null) return;
@@ -210,23 +217,38 @@ public class Player : NetworkBehaviour
 		if (!activeInfantry) { AssignLeader(); return; }
 		activeInfantry.weapon.Damage(_raycast);
 	}
-	void OnBattleInteraction()
+	void OnBattleInteractionComplete()
 	{
-		print(_raycast.collider);
-		if (!_raycast.collider) return;
-
-		Infantry infantry = _raycast.collider.GetComponent<Infantry>();
-		if (!infantry) infantry = _raycast.collider.transform.parent.GetComponent<Infantry>();
-
-		if (infantry) {
-			selectedInfantry.Add(infantry);
-			return; 
+		_selectionEnd = _raycast.point;
+		
+		if (_isSelecting)
+		{
+			SelectArmyInSelection();
+			return;
 		}
 
-		foreach (Infantry selected in selectedInfantry) {
-			if (!selected) continue;
-			selected.OnCommandServerRpc(_raycast.point);
-		}
+		_isSelecting = false;
+	}
+
+	void SelectArmyInSelection()
+	{
+		Vector3 pointA = new(_selectionStart.x, GameData.Instance.selectionBoundsY.x, _selectionStart.z);
+		Vector3 pointB = new(_selectionEnd.x, GameData.Instance.selectionBoundsY.y, _selectionEnd.z);
+		Collider[] selectedObjects = BasicPhysics.GetAllWithinBox(pointA, pointB);
+        foreach (var item in selectedObjects)
+        {
+			var component = BasicComponent.GetInParent<Unit>(item);
+			if (component) selectedInfantry.Add(component);
+        }
+    }
+
+
+	// Interaction Mode Based Functions (On Click Start)
+	void OnBattleInteractionStart() 
+	{
+		_isSelecting = false;
+		_selectionStart = _raycast.point;
+		if (_raycast.collider) _isSelecting = _raycast.collider.gameObject.layer == 6;
 	}
 
 
@@ -234,10 +256,7 @@ public class Player : NetworkBehaviour
 	void OnBattleModeActivate()
 	{
 		transform.eulerAngles = new(90, 0, 0);
-		movementMode = MovementMode.Orthographic;
-		if (_utilizeOrthographicCamera) _camera.orthographic = true;
-		_camera.orthographicSize = GameData.Instance.orthographicSize;
-		Teleport(new(transform.position.x, GameData.Instance.orthographicYPosition, transform.position.z));
+		movementMode = MovementMode.TopDown;
 	}
 	void AssignLeader()
 	{
@@ -257,12 +276,12 @@ public class Player : NetworkBehaviour
 	{
 		if (!IsOwner) return;
 
-		if (interactionMode is PlayerInteraction.Battle or PlayerInteraction.Lead) ResetTransform();
+		if (interactionMode is PlayerInteraction.Lead) ResetTransform();
 		interactionMode = mode;
 
 		if (activeInfantry) { activeInfantry.OnExitControllServerRpc(); activeInfantry = null; }
 		GameData.Instance.crossHair.SetActive(false);
-		movementMode = MovementMode.Topdown;
+		movementMode = MovementMode.AirView;
 		raycastMode = RaycastMode.Mouse;
 		_camera.orthographic = false;
 		ResetRotation();

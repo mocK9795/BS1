@@ -10,6 +10,7 @@ public class GameData : MonoBehaviour
 	[Tooltip("When the player controls a leader, this offset will be applied to the position of the camera")]
 	public Vector3 leadFaceOffset;
 	public float defaultPlayerY;
+	public Vector2 selectionBoundsY;
 
 	[Header("Player Orthographic Mode")]
 	public float orthographicSize;
