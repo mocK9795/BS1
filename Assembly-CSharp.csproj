@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\UI\Colors\ColorPalatte.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\GameManager.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBox.cs" />
+    <Compile Include="Assets\Terrain\Noise.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBase.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Managers\ProductionManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Follower.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Good.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabManager.cs" />
+    <Compile Include="Assets\Terrain\NoiseSettings.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspectable.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Converter.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Unit.cs" />
@@ -96,9 +98,12 @@
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Storage.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Political Simulator\PoliticalSearch.cs" />
+    <Compile Include="Assets\Terrain\FalloffMapGenerator.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\PEBObject.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WateverVolumeFloater.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Managers\ConstructionManager.cs" />
+    <Compile Include="Assets\Terrain\HeightMapGenerator.cs" />
+    <Compile Include="Assets\Terrain\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Devlog\CinematicCamera.cs" />
   </ItemGroup>
   <ItemGroup>

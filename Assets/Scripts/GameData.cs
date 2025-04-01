@@ -37,3 +37,5 @@ public class GameData : MonoBehaviour
 		else { Destroy(Instance); Instance = this; }
 	}
 }
+
+public enum Bool { True, False }
