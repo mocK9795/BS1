@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabButton.cs" />
+    <Compile Include="Assets\Terrain\FoliageSpawner.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Good.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabManager.cs" />

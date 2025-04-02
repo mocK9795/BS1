@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalizeMode: 0
   scale: 200
-  octaves: 6
+  octaves: 10
   persistance: 0.5
   lacunarity: 2.13
   seed: 1
