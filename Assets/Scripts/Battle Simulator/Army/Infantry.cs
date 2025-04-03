@@ -14,6 +14,7 @@ public class Infantry : Unit, ICommandable, IControllable
 	
 	Vector2 _movement = new();
 	Vector3 _objective = new();
+	PEBObject _enemy = null;
 
 
 	public Vector3 Position() { return transform.position; }
@@ -60,6 +61,7 @@ public class Infantry : Unit, ICommandable, IControllable
 	public void OnCommandServerRpc(Vector3 objective)
 	{
 		if (!_agent.enabled) return; 
+		_objective = objective;
 		_agent.SetDestination(_objective);
 	}
 
@@ -90,27 +92,12 @@ public class Infantry : Unit, ICommandable, IControllable
 	void LocalLogic()
 	{
 		if (_controller.enabled || !weapon) return;
-
-		Collider[] nearbyObjects = Physics.OverlapSphere(transform.position, weapon.range);
-		List<PEBObject> validObject = new();
-
-		foreach (Collider obj in nearbyObjects)
+		if (_enemy) weapon.Damage(_enemy);
+		if (!_enemy)
 		{
-			PEBObject nationality = obj.GetComponent<PEBObject>();
-			if (!nationality && obj.transform.parent)
-				nationality = obj.transform.parent.GetComponent<PEBObject>();
-
-			if (!nationality) continue;
-			if (nationality.nation.Value.ToString() == _data.nation.Value.ToString()) continue;
-
-			validObject.Add(nationality);
+			_enemy = FindEnemyTarget(weapon.range);
+			if (_enemy) StartCoroutine(LookAtTarget(_enemy.transform.position));
 		}
-
-		if (validObject.Count == 0) return;
-
-		int aim = Random.Range(0, validObject.Count - 1);
-		LookAtTarget(validObject[aim].transform.position);
-		weapon.Damage(validObject[aim]);
 	}
 
 	IEnumerator LookAtTarget(Vector3 point)

@@ -2,7 +2,6 @@ using Unity.Netcode;
 using UnityEngine;
 using GameFunctions;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 public class Player : NetworkBehaviour
 {
@@ -35,7 +34,9 @@ public class Player : NetworkBehaviour
 	IControllable activeControlledUnit;
 
 	// Battle Mode
-	[SerializeField] List<ICommandable> selectedCommandables = new();
+	public enum BattleModeInteraction {Selection, Command}
+	public BattleModeInteraction battleInteraction;
+	List<ICommandable> selectedCommandables = new();
 	Vector3 _selectionStart;
 	Vector3 _selectionEnd;
 	bool _isSelecting;
@@ -55,9 +56,15 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerLook += OnPlayerLook;
 			PlayerInputManager.Instance.onPlayerClickStart += OnPlayerInteractionStart;
 			PlayerInputManager.Instance.onPlayerClickEnd += OnPlayerInteractionEnd;
+
 			PlayerInputManager.Instance.localPlayerCamera = _camera;
 			PlayerInputManager.Instance.localPlayer = this;
+			
+			if (TabManager.Instance)
 			TabManager.Instance.onTabSelectionChange += OnInteractionModeChange;
+			
+			if (BattleModeUI.Instance)
+			BattleModeUI.Instance.onBattleModeInteractionChange += OnBattleModeInteractionChange;
 		}
 		else
 		{
@@ -69,10 +76,7 @@ public class Player : NetworkBehaviour
 	{
 		if (!IsOwner) return;
 
-		if (movementMode == MovementMode.Free) FreeMovement();
-		if (movementMode == MovementMode.AirView) AirViewMovement();
-		if (movementMode == MovementMode.Lead) LeadMovement();
-		if (movementMode == MovementMode.TopDown) TopdownMovement();
+		ApplyMovement();
 
 		_raycast = Raycast();
 		OnHover();
@@ -82,6 +86,13 @@ public class Player : NetworkBehaviour
 	
 
 	// Movement Based Functions
+	void ApplyMovement() {
+		if (_isSelecting) return;
+		if (movementMode == MovementMode.Free) FreeMovement();
+		if (movementMode == MovementMode.AirView) AirViewMovement();
+		if (movementMode == MovementMode.Lead) LeadMovement();
+		if (movementMode == MovementMode.TopDown) TopdownMovement();
+	}
 	void AirViewMovement()
 	{
 		_controller.Move(
@@ -218,19 +229,22 @@ public class Player : NetworkBehaviour
 		if (activeControlledUnit == null) { AssignLeader(); return; }
 		activeControlledUnit.ControlDamage(_raycast);
 	}
-	void OnBattleInteractionComplete()
-	{
-		_selectionEnd = _raycast.point;
-
-		if (_isSelecting) SelectArmyInSelection();
-		else SetSelectionTarget(_raycast.point);
-
-		_isSelecting = false;
-	}
 
 
 	// Battle Mode Functions
+	void OnBattleModeInteractionChange(BattleModeInteraction interaction) {battleInteraction = interaction; }
+	
+	void OnBattleInteractionComplete()
+	{
+		_selectionEnd = _raycast.point;
+		_isSelecting = _isSelecting && PlayerInputManager.Instance.isDraging 
+						&& battleInteraction == BattleModeInteraction.Selection;
+		
+		if (_isSelecting) SelectArmyInSelection();
+		else if (!PlayerInputManager.Instance.isDraging) SetSelectionTarget(_raycast.point);
 
+		_isSelecting = false;
+	}
 	void SelectArmyInSelection()
 	{
 		Vector3 pointA = new(_selectionStart.x, GameData.Instance.selectionBoundsY.x, _selectionStart.z);
@@ -250,17 +264,13 @@ public class Player : NetworkBehaviour
 			selected.OnCommandServerRpc(objective);
 		}
 	}
-
-
-	// Interaction Mode Based Functions (On Click Start)
 	void OnBattleInteractionStart() 
 	{
 		_isSelecting = false;
 		_selectionStart = _raycast.point;
 		if (_raycast.collider) _isSelecting = _raycast.collider.gameObject.layer == 6;
 	}
-
-
+	
 	// Interaction Mode Switch Based Functions
 	void OnBattleModeActivate()
 	{
@@ -331,5 +341,11 @@ public class Player : NetworkBehaviour
 	void Teleport(Vector3 positon)
 	{
 		_controller.Move(positon - transform.position);
+	}
+
+	[ContextMenu("Debug")]
+	void Debug()
+	{
+		print("Selected Units " + selectedCommandables.Count.ToString());
 	}
 }

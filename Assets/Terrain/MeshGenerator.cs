@@ -14,6 +14,7 @@ public class MeshGenerator : MonoBehaviour
     [ContextMenu("Create Mesh")]
     public void CreateMesh()
     {
+        if (updateMesh == Bool.False) return;
         if (meshFilter == null) meshFilter = GetComponent<MeshFilter>();
 
         Vector3[] vertexData = CreateVerticies();
@@ -102,7 +103,7 @@ public class MeshGenerator : MonoBehaviour
 
 	private void OnValidate()
 	{
-        if (updateMesh == Bool.True) CreateMesh(); 
+        CreateMesh(); 
 	}
 }
 

@@ -61,11 +61,11 @@ public class PlayerInputManager : MonoBehaviour
 		if (value.started) onPlayerClickStart?.Invoke();
 		if (!value.canceled) return;
 
+		onPlayerClickEnd?.Invoke();
+
 		isDraging = false;
 		currentDrag = 0;
-
-		onPlayerClickEnd?.Invoke();
-	} 
+	}
 
 	public void GrantMousePosition(InputAction.CallbackContext value)
 	{

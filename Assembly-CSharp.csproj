@@ -77,6 +77,7 @@
     <Compile Include="Assets\Scripts\UI\Object Inspection\Popup.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeHelper.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Managers\BaseManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Battle Mode UI\BattleModeOption.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Health\Health.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabButton.cs" />
     <Compile Include="Assets\Terrain\FoliageSpawner.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Scripts\Battle Simulator\Health\PEBObject.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WateverVolumeFloater.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Managers\ConstructionManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Battle Mode UI\BattleModeUI.cs" />
     <Compile Include="Assets\Terrain\HeightMapGenerator.cs" />
     <Compile Include="Assets\Terrain\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Devlog\CinematicCamera.cs" />
