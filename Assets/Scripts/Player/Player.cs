@@ -32,10 +32,10 @@ public class Player : NetworkBehaviour
 	GameObject initialyInspectedObject;
 
 	// Lead Mode
-	Infantry activeInfantry;
+	IControllable activeControlledUnit;
 
 	// Battle Mode
-	[SerializeField] List<Unit> selectedInfantry = new();
+	[SerializeField] List<ICommandable> selectedCommandables = new();
 	Vector3 _selectionStart;
 	Vector3 _selectionEnd;
 	bool _isSelecting;
@@ -56,6 +56,7 @@ public class Player : NetworkBehaviour
 			PlayerInputManager.Instance.onPlayerClickStart += OnPlayerInteractionStart;
 			PlayerInputManager.Instance.onPlayerClickEnd += OnPlayerInteractionEnd;
 			PlayerInputManager.Instance.localPlayerCamera = _camera;
+			PlayerInputManager.Instance.localPlayer = this;
 			TabManager.Instance.onTabSelectionChange += OnInteractionModeChange;
 		}
 		else
@@ -93,11 +94,11 @@ public class Player : NetworkBehaviour
 	}
 	void LeadMovement()
 	{
-		if (!activeInfantry) return;
+		if (activeControlledUnit == null) return;
 		FreeRotation();
-		activeInfantry.MoveServerRpc(_movement);
-		activeInfantry.RotateServerRpc(transform.eulerAngles.y);
-		transform.position = activeInfantry.transform.position + GameData.Instance.leadFaceOffset;
+		activeControlledUnit.ControlMoveServerRpc(_movement);
+		activeControlledUnit.ControlLookServerRpc(transform.eulerAngles.y);
+		transform.position = activeControlledUnit.Position() + GameData.Instance.leadFaceOffset;
 	}
 	void TopdownMovement()
 	{
@@ -214,33 +215,41 @@ public class Player : NetworkBehaviour
 	}
 	void OnPlayerLead()
 	{
-		if (!activeInfantry) { AssignLeader(); return; }
-		activeInfantry.weapon.Damage(_raycast);
+		if (activeControlledUnit == null) { AssignLeader(); return; }
+		activeControlledUnit.ControlDamage(_raycast);
 	}
 	void OnBattleInteractionComplete()
 	{
 		_selectionEnd = _raycast.point;
-		
-		if (_isSelecting)
-		{
-			SelectArmyInSelection();
-			return;
-		}
+
+		if (_isSelecting) SelectArmyInSelection();
+		else SetSelectionTarget(_raycast.point);
 
 		_isSelecting = false;
 	}
+
+
+	// Battle Mode Functions
 
 	void SelectArmyInSelection()
 	{
 		Vector3 pointA = new(_selectionStart.x, GameData.Instance.selectionBoundsY.x, _selectionStart.z);
 		Vector3 pointB = new(_selectionEnd.x, GameData.Instance.selectionBoundsY.y, _selectionEnd.z);
 		Collider[] selectedObjects = BasicPhysics.GetAllWithinBox(pointA, pointB);
-        foreach (var item in selectedObjects)
+        foreach (var selected in selectedObjects)
         {
-			var component = BasicComponent.GetInParent<Unit>(item);
-			if (component) selectedInfantry.Add(component);
+			var component = selected.GetComponentInParent<ICommandable>();
+			if (component != null) selectedCommandables.Add(component);
         }
     }
+	void SetSelectionTarget(Vector3 objective)
+	{
+		foreach (var selected in selectedCommandables)
+		{
+			if (selected == null) return;
+			selected.OnCommandServerRpc(objective);
+		}
+	}
 
 
 	// Interaction Mode Based Functions (On Click Start)
@@ -261,15 +270,12 @@ public class Player : NetworkBehaviour
 	void AssignLeader()
 	{
 		if (!_raycast.collider) return;
-		Infantry infantryComponent = _raycast.collider.GetComponent<Infantry>();
-		if (!infantryComponent && _raycast.collider.transform.parent)
-			infantryComponent = _raycast.collider.transform.parent.GetComponent<Infantry>();
-		if (!infantryComponent) return;
+		IControllable infantryComponent = _raycast.collider.GetComponentInParent<IControllable>();
 
 		raycastMode = RaycastMode.Centre;
 		movementMode = MovementMode.Lead;
-		activeInfantry = infantryComponent;
-		activeInfantry.OnControllServerRpc();
+		activeControlledUnit = infantryComponent;
+		activeControlledUnit.OnControlEnterServerRpc();
 		GameData.Instance.crossHair.SetActive(true);
 	}
 	void OnInteractionModeChange(PlayerInteraction mode)
@@ -279,7 +285,8 @@ public class Player : NetworkBehaviour
 		if (interactionMode is PlayerInteraction.Lead) ResetTransform();
 		interactionMode = mode;
 
-		if (activeInfantry) { activeInfantry.OnExitControllServerRpc(); activeInfantry = null; }
+		if (activeControlledUnit != null) 
+		{ activeControlledUnit.OnControlExitServerRpc(); activeControlledUnit = null; }
 		GameData.Instance.crossHair.SetActive(false);
 		movementMode = MovementMode.AirView;
 		raycastMode = RaycastMode.Mouse;

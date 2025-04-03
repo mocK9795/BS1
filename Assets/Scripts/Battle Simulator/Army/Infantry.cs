@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Collections;
 
-public class Infantry : Unit
+public class Infantry : Unit, ICommandable, IControllable
 {
 	CharacterController _controller;
 	NavMeshAgent _agent;
@@ -15,6 +15,8 @@ public class Infantry : Unit
 	Vector2 _movement = new();
 	Vector3 _objective = new();
 
+
+	public Vector3 Position() { return transform.position; }
 
 
 	public override void OnNetworkSpawn()
@@ -41,43 +43,42 @@ public class Infantry : Unit
 
 	// Controll Management
 	[ServerRpc(RequireOwnership = false)]
-	public void OnControllServerRpc()
+	public void OnControlEnterServerRpc()
 	{
 		InfantryTick.Instance.Logic -= LocalLogic;
 		_controller.enabled = true;
 		_agent.enabled = false;
 	}
 	[ServerRpc(RequireOwnership = false)]
-	public void OnExitControllServerRpc()
+	public void OnControlExitServerRpc()
 	{
 		InfantryTick.Instance.Logic += LocalLogic;
 		_controller.enabled = false;
 		_agent.enabled = true;
 	}
-
 	[ServerRpc(RequireOwnership = false)]
-	public override void OnCommandServerRpc(Vector3 objective)
+	public void OnCommandServerRpc(Vector3 objective)
 	{
 		if (!_agent.enabled) return; 
-		base.OnCommandServerRpc(objective);
 		_agent.SetDestination(_objective);
 	}
 
 
 	// Controlled Movement
 	[ServerRpc(RequireOwnership = false)]
-	public void MoveServerRpc(Vector2 value)
+	public void ControlMoveServerRpc(Vector2 value)
 	{
 		if (!_controller.enabled) return;
 		_movement = value;
 	}
 
 	[ServerRpc(RequireOwnership = false)]
-	public void RotateServerRpc(float value)
+	public void ControlLookServerRpc(float value)
 	{
 		if (!_controller.enabled) return;
 		transform.eulerAngles = Basic.XZPlane(transform.eulerAngles) + Vector3.up * value;
 	}
+	
 	void ControlledMovement()
 	{
 		_controller.Move((_movement.y * Basic.XZPlane(transform.forward) +
@@ -137,5 +138,10 @@ public class Infantry : Unit
 	{
 		if (IsServer) InfantryTick.Instance.Logic -= LocalLogic;
 		base.OnNetworkDespawn();
+	}
+
+	public void ControlDamage(RaycastHit raycast)
+	{
+		weapon.Damage(raycast);
 	}
 } 

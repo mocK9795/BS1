@@ -20,6 +20,7 @@ public class PlayerInputManager : MonoBehaviour
 	float currentDrag;
 
 	public Camera localPlayerCamera;
+	public Player localPlayer;
 
 	EventSystem eventSystem;
 

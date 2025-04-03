@@ -53,7 +53,7 @@ namespace GameFunctions
 		/// <typeparam name="T"></typeparam>
 		/// <param name="focus"></param>
 		/// <returns></returns>
-		public static T GetInParent<T>(Component focus) where T : Component
+		public static T GetInParent<T>(Component focus) where T : Component, ICommandable, IControllable
 		{
 			T component = focus.GetComponent<T>();
 			if (component) return component;
