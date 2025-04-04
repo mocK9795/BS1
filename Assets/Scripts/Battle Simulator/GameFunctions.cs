@@ -9,6 +9,12 @@ namespace GameFunctions
 		public static Vector2 Inverse(Vector2 value) { return value * -1; }
 		public static Vector2 LookValue(Vector2 value) { return new(-value.y, value.x); }
 		public static Vector3 vector3(Vector2 value) { return new(value.x, value.y); }
+		/// <summary>
+		/// Returns xz plane as vector2
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static Vector2 vector2(Vector3 value) { return new Vector2(value.x, value.z); }
 		public static Vector3 XYPlane(Vector3 value) { return new(value.x, value.y); }
 		public static Vector3 XZPlane(Vector3 value) { return new(value.x, 0, value.z); }
 		public static bool Within(float x, float min, float max) { return (min <= x && max >= x); }

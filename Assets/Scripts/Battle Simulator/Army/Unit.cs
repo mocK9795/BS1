@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -50,7 +51,6 @@ public interface IControllable
 	[ServerRpc(RequireOwnership = false)]
 	void OnControlExitServerRpc();
 	void ControlDamage(RaycastHit raycast);
-
 	Vector3 Position();
 }
 
@@ -58,4 +58,5 @@ public interface ICommandable
 {
 	[ServerRpc(RequireOwnership = false)]
 	void OnCommandServerRpc(Vector3 objective);
+	int Identity();
 }

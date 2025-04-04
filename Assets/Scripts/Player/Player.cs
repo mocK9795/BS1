@@ -253,11 +253,17 @@ public class Player : NetworkBehaviour
         foreach (var selected in selectedObjects)
         {
 			var component = selected.GetComponentInParent<ICommandable>();
-			if (component != null) selectedCommandables.Add(component);
+			if (component != null && !IsSelectedInSelection(component)) selectedCommandables.Add(component);
         }
     }
+	bool IsSelectedInSelection(ICommandable selected) {
+		foreach (var commandable in selectedCommandables)
+		{if (commandable.Identity() == selected.Identity()) return true;}
+		return false;
+	}
 	void SetSelectionTarget(Vector3 objective)
 	{
+		print(objective);
 		foreach (var selected in selectedCommandables)
 		{
 			if (selected == null) return;

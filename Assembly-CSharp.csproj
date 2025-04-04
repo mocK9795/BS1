@@ -83,13 +83,13 @@
     <Compile Include="Assets\Terrain\FoliageSpawner.cs" />
     <Compile Include="Assets\Scripts\Input\PlayerInputManager.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Good.cs" />
+    <Compile Include="Assets\Scripts\Battle Simulator\Weapons\Armament.cs" />
     <Compile Include="Assets\Scripts\UI\Tab System\TabManager.cs" />
     <Compile Include="Assets\Terrain\NoiseSettings.cs" />
     <Compile Include="Assets\Scripts\UI\Object Inspection\Inspectable.cs" />
     <Compile Include="Assets\Scripts\Economy Simulator\Production\Converter.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Unit.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\Leader.cs" />
-    <Compile Include="Assets\Scripts\Battle Simulator\Weapons\Weapon.cs" />
     <Compile Include="Assets\Scripts\Battle Simulator\Army\InfantryTick.cs" />
     <Compile Include="Assets\Scripts\Network\SampleNetworkUI.cs" />
     <Compile Include="Assets\Scripts\UI\Contruction UI\ConstructionOption.cs" />
